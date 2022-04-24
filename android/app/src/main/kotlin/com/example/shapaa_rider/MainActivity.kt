@@ -1,0 +1,6 @@
+package com.example.shapaa_rider
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
