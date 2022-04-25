@@ -1,0 +1,92 @@
+{
+  "project_info": {
+    "project_number": "240257521924",
+    "project_id": "shapaa-18fa6",
+    "storage_bucket": "shapaa-18fa6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240257521924:android:b0b3ac6be39334642dd851",
+        "android_client_info": {
+          "package_name": "com.example.shapaa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "240257521924-3a4gg24n5k75an9kh20kqtss7tgslg02.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shapaa",
+            "certificate_hash": "dfaee2d4f6eea736e4f4641f7bd210141f421e39"
+          }
+        },
+        {
+          "client_id": "240257521924-i7k5kdt1noluamc74kla74ciqp9f52cg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shapaa",
+            "certificate_hash": "f0bfeaf5ce4f9654bef544af842319e731757cea"
+          }
+        },
+        {
+          "client_id": "240257521924-t4verv991qejnf6srsm9218rucele1s1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shapaa",
+            "certificate_hash": "dfea38f7dde18ec515f59e1ab234e8816d604d3b"
+          }
+        },
+        {
+          "client_id": "240257521924-uhu7v03794klrtvsg6e36irelfqgaidg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9ns1kqWKxE-ktj4cuhBHuUV8ZKUcIRw0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "240257521924-uhu7v03794klrtvsg6e36irelfqgaidg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240257521924:android:ed6a8d88dd18236a2dd851",
+        "android_client_info": {
+          "package_name": "com.example.shapaa_rider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "240257521924-uhu7v03794klrtvsg6e36irelfqgaidg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9ns1kqWKxE-ktj4cuhBHuUV8ZKUcIRw0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "240257521924-uhu7v03794klrtvsg6e36irelfqgaidg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
