@@ -6,9 +6,12 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 import 'package:shapaa_rider/views/on_bording_screen.dart';
+import 'package:shapaa_rider/views/rider_documents/documents_screen.dart';
 
 import 'controllers/auth_controller.dart';
 import 'views/home_screen.dart';
+
+var cameras;
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +31,7 @@ class MyApp extends StatelessWidget {
         builder: (context) => GetMaterialApp(
               debugShowCheckedModeBanner: false,
               // builder: EasyLoading.init(),
-              home: landingPage(),
+              home: DocumentsScreen(),
             ));
   }
 }

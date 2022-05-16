@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -6,6 +9,7 @@ import 'package:get/get.dart';
 
 import 'package:localstore/localstore.dart';
 
+import '../main.dart';
 import '../models/user_model.dart';
 import '../views/authentication/otp_screen.dart';
 import '../views/authentication/phone_auth_screen.dart';
@@ -27,6 +31,35 @@ class AuthController extends GetxController {
   final signUpFormKey = GlobalKey<FormState>();
   final updateNameFormKey = GlobalKey<FormState>();
   final updateEmailFormKey = GlobalKey<FormState>();
+
+  // documents
+
+  CameraController? controller;
+  int selectedCamera = 1;
+  Future<void>? initializeControllerFuture;
+  File? file;
+String? profileImage;
+  initializeCamera(int cameraIndex) async {
+    controller = CameraController(cameras[cameraIndex], ResolutionPreset.medium,
+        imageFormatGroup: ImageFormatGroup.yuv420);
+    initializeControllerFuture = controller?.initialize();
+    update();
+  }
+
+  getImageFromInAppCamera() async {
+    try {
+      await initializeControllerFuture; //To make sure camera is initialized
+      var xFile = await controller?.takePicture();
+      file = File(xFile!.path);
+      if (file != null) {
+        file =File(xFile.path);
+
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString(),
+          backgroundColor: Colors.lightBlue, colorText: Colors.white);
+    }
+  }
 
   registerWithPhoneCredentials() async {
     try {
