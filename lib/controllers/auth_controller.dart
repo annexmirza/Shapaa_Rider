@@ -121,7 +121,7 @@ class AuthController extends GetxController {
       userModel.lastName = lastNameController.text;
       userModel.email = emailController.text;
       userModel.phoneNumber = auth.currentUser!.phoneNumber;
-      userModel.userType = 'user';
+      userModel.userType = 'rider';
       userModel.profilePic = '';
       addUser();
     }

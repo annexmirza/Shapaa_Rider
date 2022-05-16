@@ -25,7 +25,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
         inactiveBulletColor: Colors.white,
         // backgroundProvider: NetworkImage('https://picsum.photos/720/1280'),
         skipCallback: () {
-          // Get.offAll(() => PhoneAuthScreen());
+          Get.offAll(() => PhoneAuthScreen());
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("Skip clicked"),
           ));
