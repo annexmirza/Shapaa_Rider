@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shapaa_rider/controllers/auth_controller.dart';
-
+import 'package:shapaa_rider/views/rider_documents/document_submit_screen.dart';
 import '../../main.dart';
 
 class DocumentFilePage extends StatefulWidget {
@@ -18,7 +18,7 @@ class _DocumentFilePageState extends State<DocumentFilePage> {
 
   @override
   void initState() {
-    authController.initializeCamera(authController.selectedCamera);
+    authController.initializeCamera(authController.selectedCamera == 1 ? 0 : 0);
     super.initState();
   }
 
@@ -35,17 +35,21 @@ class _DocumentFilePageState extends State<DocumentFilePage> {
         return Stack(
           fit: StackFit.expand,
           children: [
-            FutureBuilder<void>(
-              future: authController.initializeControllerFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  // If the Future is complete, display the preview.
-                  return CameraPreview(authController.controller!);
-                } else {
-                  // Otherwise, display a loading indicator.
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
+            Container(
+              // height: 350.h,
+              // width: 350.h,
+              child: FutureBuilder<void>(
+                future: authController.initializeControllerFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    // If the Future is complete, display the preview.
+                    return CameraPreview(authController.controller!);
+                  } else {
+                    // Otherwise, display a loading indicator.
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
             ),
             cameraOverlay(
                 padding: 18, aspectRatio: 0.6, color: Color(0x55000022)),
@@ -66,7 +70,6 @@ class _DocumentFilePageState extends State<DocumentFilePage> {
                                 : 1; //Switch camera
                             authController.initializeCamera(
                                 authController.selectedCamera == 1 ? 0 : 0);
-                            authController.initializeCamera(authController.selectedCamera);
                           } else {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
@@ -92,7 +95,7 @@ class _DocumentFilePageState extends State<DocumentFilePage> {
                         onTap: () async {
                           await authController.getImageFromInAppCamera();
                           if (authController.file != null) {
-                            //Get.to(() => DriverDocumentSubmitPage());
+                            Get.to(() => DocumentSubmitPage());
                           }
                         },
                         child: Container(
@@ -105,7 +108,7 @@ class _DocumentFilePageState extends State<DocumentFilePage> {
                             child: Container(
                               height: 60.h,
                               width: 60.h,
-                              padding: const EdgeInsets.symmetric(
+                              padding: EdgeInsets.symmetric(
                                   vertical: 10.0, horizontal: 10.0),
                               decoration: BoxDecoration(
                                   gradient: const LinearGradient(
@@ -116,7 +119,7 @@ class _DocumentFilePageState extends State<DocumentFilePage> {
                                       Colors.red,
                                     ],
                                   ),
-                                  color: Colors.blueAccent,
+                                  color: Colors.blue,
                                   borderRadius: BorderRadius.circular(40.0)),
                             ),
                           ),
@@ -126,17 +129,19 @@ class _DocumentFilePageState extends State<DocumentFilePage> {
                     SizedBox(
                       width: 70.w,
                     ),
+
+                    /*
                     InkWell(
                       onTap: () {
-                        /*
+
                         Get.dialog(customDialogBox(
                             title: "Upload Document",
                             description: "",
                             firstButtontitle: "Gallery",
                             firstOntab: () async {
                               Navigator.of(context).pop();
-                              await driverController.getImageFromGallery();
-                              if (driverController.file != null) {
+                              await authController.getImageFromGallery();
+                              if (authController.file != null) {
                                 Get.to(() => DriverDocumentSubmitPage());
                               }
                             },
@@ -144,14 +149,12 @@ class _DocumentFilePageState extends State<DocumentFilePage> {
                             seconButtontitle: "Drive",
                             secondOntab: () async {
                               Navigator.of(context).pop();
-                              await driverController.getFileFromDevice();
-                              if (driverController.file != null) {
+                              await authController.getFileFromDevice();
+                              if (authController.file != null) {
                                 Get.to(() => DriverDocumentSubmitPage());
                               }
                             },
                             secondIcon: Icons.camera_enhance_rounded));
-
-                         */
 
                         // Get.bottomSheet(
                         //   Container(
@@ -204,6 +207,7 @@ class _DocumentFilePageState extends State<DocumentFilePage> {
                         ),
                       ),
                     ),
+                     */
                   ],
                 ),
               ),
@@ -261,7 +265,7 @@ Widget cameraOverlay(
             horizontal: horizontalPadding, vertical: verticalPadding),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(1),
-            border: Border.all(color: Colors.blueAccent)),
+            border: Border.all(color: Colors.blue)),
       )
     ]);
   });

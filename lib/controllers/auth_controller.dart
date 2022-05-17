@@ -1,13 +1,15 @@
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:localstore/localstore.dart';
+import 'package:shapaa_rider/models/document_model.dart';
+import 'package:shapaa_rider/views/rider_documents/documents_screen.dart';
 
 import '../main.dart';
 import '../models/user_model.dart';
@@ -38,7 +40,23 @@ class AuthController extends GetxController {
   int selectedCamera = 1;
   Future<void>? initializeControllerFuture;
   File? file;
-String? profileImage;
+  String? profileImage;
+  List<DocumentModel> listOfDocuments = [];
+  DocumentModel selectedDocument = DocumentModel();
+
+
+  addDocumentsData(){
+    if(listOfDocuments.isEmpty) {
+      listOfDocuments.add(DocumentModel(docTitle: 'Vehicle Registration Copy'));
+      listOfDocuments.add(DocumentModel(docTitle: 'Identification Card (Front)'));
+      listOfDocuments.add(DocumentModel(docTitle: 'Identification Card (Back)'));
+      listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Front)'));
+      listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Back)'));
+    }
+  }
+  mapSelectedDocument(DocumentModel doc){
+    selectedDocument = doc;
+  }
   initializeCamera(int cameraIndex) async {
     controller = CameraController(cameras[cameraIndex], ResolutionPreset.medium,
         imageFormatGroup: ImageFormatGroup.yuv420);
@@ -262,5 +280,33 @@ String? profileImage;
         .doc(auth.currentUser!.uid)
         .set(userModel.mapToLocalStorage());
     update();
+  }
+
+  uploadFileToFirebaseStorage() async {
+    try {
+      // isButtonVisible = false;
+      // loadingService.start();
+      // update();
+      if (file != null) {
+        String name = path.basename(file!.path);
+        selectedDocument.docFile = '';
+        var taskSnapshot = await FirebaseStorage.instance
+            .ref()
+            .child('riderDocs/$name')
+            .putFile(file!);
+        if (taskSnapshot != null) {
+          var value = await taskSnapshot.ref.getDownloadURL();
+            selectedDocument.docFile = value;
+            // isButtonVisible = true;
+            // loadingService.stop();
+            // update();
+            Get.offAll(() => DocumentsScreen());
+          }
+        }
+    } catch (e) {
+      Get.snackbar('Error', e.toString(),
+          backgroundColor: Colors.lightBlue, colorText: Colors.white);
+    }
+    file = null;
   }
 }

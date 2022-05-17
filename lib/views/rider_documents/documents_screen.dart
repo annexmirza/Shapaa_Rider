@@ -14,6 +14,7 @@ class DocumentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    authController.addDocumentsData();
     return Scaffold(
       backgroundColor: const Color(0XffBCBABA),
       body: SingleChildScrollView(child: GetBuilder<AuthController>(
@@ -45,53 +46,30 @@ class DocumentsScreen extends StatelessWidget {
                       // Center(child: Text('OTP',style: GoogleFonts.poppins(fontSize: 24.sp,fontWeight: FontWeight.bold,color: Colors.black),)),
                     ],
                   )),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children:  [
-                  Center(
-                    child: CustomText(
-                        text: 'Rider Documents',
-                        fontSize: 25.sp,
-                    ),
-                  ),
-                  DocumentCard(
-                    ontap: (){},
-                    dateOnTap: (){},
-                    titletext: 'Vehicle Registration Copy',
-                    subtext: '',
-                  ),
-                  SizedBox(height: 10.h),
-                  DocumentCard(
-                      ontap: (){
-                        print("hellooo");
-                        Get.to(() => DocumentFilePage());
-                      },
-                      dateOnTap: (){},
-                      titletext: 'Identification Card (Front)',
-                      subtext: '',
-                  ),
-                  SizedBox(height: 10.h,),
-                  DocumentCard(
-                    ontap: (){},
-                    dateOnTap: (){},
-                    titletext: 'Identification Card (Back)',
-                    subtext: '',
-                  ),
-                  SizedBox(height: 10.h,),
-                  DocumentCard(
-                    ontap: (){},
-                    dateOnTap: (){},
-                    titletext: 'Driving License (Front)',
-                    subtext: '',
-                  ),
-                  SizedBox(height: 10.h,),
-                  DocumentCard(
-                    ontap: (){},
-                    dateOnTap: (){},
-                    titletext: 'Driving License (Back)',
-                    subtext: '',
-                  ),
-                ],
+              Center(
+                child: CustomText(
+                  text: 'Rider Documents',
+                  fontSize: 25.sp,
+                ),
+              ),
+
+              for(var document in authController.listOfDocuments)
+              DocumentCard(
+                ontap: (){
+                  authController.mapSelectedDocument(document);
+                  Get.to(() => DocumentFilePage());
+                },
+                uploadingDoc: document
+                    .docFile != null && document.docFile!.isEmpty
+                    ? true
+                    : false,
+                uploaded: document.docFile != null &&
+                    document.docFile!.isNotEmpty
+                    ? true
+                    : false,
+                dateOnTap: (){},
+                titletext: document.docTitle,
+                subtext: '',
               ),
               Padding(
                 padding:
