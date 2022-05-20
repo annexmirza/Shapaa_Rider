@@ -32,34 +32,60 @@ class AuthController extends GetxController {
   final updateNameFormKey = GlobalKey<FormState>();
   final updateEmailFormKey = GlobalKey<FormState>();
 
-  // documents
-
   CameraController? controller;
-  int selectedCamera = 1;
-  Future<void>? initializeControllerFuture;
+  Future? initializeControllerFuture;
+  int? selectedCamera = 0;
+  bool isButtonVisible = true;
   File? file;
-String? profileImage;
+  String? imagePath;
   initializeCamera(int cameraIndex) async {
     controller = CameraController(cameras[cameraIndex], ResolutionPreset.medium,
         imageFormatGroup: ImageFormatGroup.yuv420);
-    initializeControllerFuture = controller?.initialize();
+
+    initializeControllerFuture = controller!.initialize();
     update();
   }
 
   getImageFromInAppCamera() async {
     try {
       await initializeControllerFuture; //To make sure camera is initialized
-      var xFile = await controller?.takePicture();
-      file = File(xFile!.path);
-      if (file != null) {
-        file =File(xFile.path);
-
+      XFile? xFile = await controller!.takePicture();
+      if (xFile != null) {
+        file = File(xFile.path);
       }
     } catch (e) {
       Get.snackbar('Error', e.toString(),
           backgroundColor: Colors.lightBlue, colorText: Colors.white);
     }
   }
+  // documents
+
+//   CameraController? controller;
+//   int selectedCamera = 1;
+//   Future<void>? initializeControllerFuture;
+//   File? file;
+// String? profileImage;
+//   initializeCamera(int cameraIndex) async {
+//     controller = CameraController(cameras[cameraIndex], ResolutionPreset.medium,
+//         imageFormatGroup: ImageFormatGroup.yuv420);
+//     initializeControllerFuture = controller?.initialize();
+//     update();
+//   }
+
+  // getImageFromInAppCamera() async {
+  //   try {
+  //     await initializeControllerFuture; //To make sure camera is initialized
+  //     var xFile = await controller?.takePicture();
+  //     file = File(xFile!.path);
+  //     if (file != null) {
+  //       file =File(xFile.path);
+
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar('Error', e.toString(),
+  //         backgroundColor: Colors.lightBlue, colorText: Colors.white);
+  //   }
+  // }
 
   registerWithPhoneCredentials() async {
     try {

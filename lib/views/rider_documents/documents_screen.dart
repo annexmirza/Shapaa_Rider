@@ -9,7 +9,6 @@ import '../../widgets/custom_form_field.dart';
 import '../../widgets/custom_text.dart';
 
 class DocumentsScreen extends StatelessWidget {
-
   final authController = Get.put(AuthController());
 
   @override
@@ -47,47 +46,53 @@ class DocumentsScreen extends StatelessWidget {
                   )),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children:  [
+                children: [
                   Center(
                     child: CustomText(
-                        text: 'Rider Documents',
-                        fontSize: 25.sp,
+                      text: 'Rider Documents',
+                      fontSize: 25.sp,
                     ),
                   ),
                   DocumentCard(
-                    ontap: (){},
-                    dateOnTap: (){},
+                    ontap: () {},
+                    dateOnTap: () {},
                     titletext: 'Vehicle Registration Copy',
                     subtext: '',
                   ),
                   SizedBox(height: 10.h),
                   DocumentCard(
-                      ontap: (){
-                        print("hellooo");
-                        Get.to(() => DocumentFilePage());
-                      },
-                      dateOnTap: (){},
-                      titletext: 'Identification Card (Front)',
-                      subtext: '',
+                    ontap: () {
+                      print("hellooo");
+                      Get.to(() => DocumentFileScreen());
+                    },
+                    dateOnTap: () {},
+                    titletext: 'Identification Card (Front)',
+                    subtext: '',
                   ),
-                  SizedBox(height: 10.h,),
+                  SizedBox(
+                    height: 10.h,
+                  ),
                   DocumentCard(
-                    ontap: (){},
-                    dateOnTap: (){},
+                    ontap: () {},
+                    dateOnTap: () {},
                     titletext: 'Identification Card (Back)',
                     subtext: '',
                   ),
-                  SizedBox(height: 10.h,),
+                  SizedBox(
+                    height: 10.h,
+                  ),
                   DocumentCard(
-                    ontap: (){},
-                    dateOnTap: (){},
+                    ontap: () {},
+                    dateOnTap: () {},
                     titletext: 'Driving License (Front)',
                     subtext: '',
                   ),
-                  SizedBox(height: 10.h,),
+                  SizedBox(
+                    height: 10.h,
+                  ),
                   DocumentCard(
-                    ontap: (){},
-                    dateOnTap: (){},
+                    ontap: () {},
+                    dateOnTap: () {},
                     titletext: 'Driving License (Back)',
                     subtext: '',
                   ),
@@ -95,7 +100,7 @@ class DocumentsScreen extends StatelessWidget {
               ),
               Padding(
                 padding:
-                EdgeInsets.symmetric(horizontal: 48.sp, vertical: 10.h),
+                    EdgeInsets.symmetric(horizontal: 48.sp, vertical: 10.h),
                 child: CustomBtn(
                     text: 'Continue',
                     onPressed: () {
