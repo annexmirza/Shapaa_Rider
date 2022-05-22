@@ -52,6 +52,8 @@ dependencies:
   localstore: ^1.2.1
   google_maps_flutter: ^2.1.5
   camera: ^0.9.4+20
+  flutter_easyloading:
+  dropdown_search: ^3.0.1
 
 dev_dependencies:
   flutter_test:

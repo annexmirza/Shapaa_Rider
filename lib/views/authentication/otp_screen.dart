@@ -71,7 +71,7 @@ class OtpScreen extends StatelessWidget {
                   child: CustomBtn(
                     text: 'Continue',
                     onPressed: () {
-                      Get.to(() => SignUpScreen());
+                      //Get.to(() => SignUpScreen());
                     },
                   ),
                 )

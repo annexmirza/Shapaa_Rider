@@ -46,30 +46,34 @@ class DocumentsScreen extends StatelessWidget {
                       // Center(child: Text('OTP',style: GoogleFonts.poppins(fontSize: 24.sp,fontWeight: FontWeight.bold,color: Colors.black),)),
                     ],
                   )),
+              SizedBox(height: 10.h,),
               Center(
                 child: CustomText(
                   text: 'Rider Documents',
                   fontSize: 25.sp,
                 ),
               ),
-
+              SizedBox(height: 10.h,),
               for(var document in authController.listOfDocuments)
-              DocumentCard(
-                ontap: (){
-                  authController.mapSelectedDocument(document);
-                  Get.to(() => DocumentFilePage());
-                },
-                uploadingDoc: document
-                    .docFile != null && document.docFile!.isEmpty
-                    ? true
-                    : false,
-                uploaded: document.docFile != null &&
-                    document.docFile!.isNotEmpty
-                    ? true
-                    : false,
-                dateOnTap: (){},
-                titletext: document.docTitle,
-                subtext: '',
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.h,horizontal: 15.w),
+                child: DocumentCard(
+                  ontap: (){
+                    authController.mapSelectedDocument(document);
+                    Get.to(() => DocumentFilePage());
+                  },
+                  uploadingDoc: document
+                      .docFile != null && document.docFile!.isEmpty
+                      ? true
+                      : false,
+                  uploaded: document.docFile != null &&
+                      document.docFile!.isNotEmpty
+                      ? true
+                      : false,
+                  dateOnTap: (){},
+                  titletext: document.docTitle,
+                  subtext: '',
+                ),
               ),
               Padding(
                 padding:
@@ -77,7 +81,7 @@ class DocumentsScreen extends StatelessWidget {
                 child: CustomBtn(
                     text: 'Continue',
                     onPressed: () {
-                      authController.validateSignUpForm();
+                      authController.validateDocuments();
                     }),
               )
             ],

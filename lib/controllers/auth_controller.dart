@@ -9,7 +9,10 @@ import 'package:get/get.dart';
 
 import 'package:localstore/localstore.dart';
 import 'package:shapaa_rider/models/document_model.dart';
+import 'package:shapaa_rider/models/vehicle_model.dart';
+import 'package:shapaa_rider/services/loading_service.dart';
 import 'package:shapaa_rider/views/rider_documents/documents_screen.dart';
+import 'package:shapaa_rider/views/rider_documents/vehicle_info_screen.dart';
 
 import '../main.dart';
 import '../models/user_model.dart';
@@ -21,8 +24,8 @@ import '../views/home_screen.dart';
 class AuthController extends GetxController {
   final auth = FirebaseAuth.instance;
   final db = Localstore.instance;
-  final CollectionReference _collectionReference =
-      FirebaseFirestore.instance.collection('users');
+  final CollectionReference _collectionReference = FirebaseFirestore.instance.collection('users');
+  final vehicleInformationCollection = 'vehicle_information';
   String? verificationIdRecieved;
   int? forceResendToken;
   UserModel userModel = UserModel();
@@ -30,9 +33,12 @@ class AuthController extends GetxController {
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
+  final registrationController = TextEditingController();
+  final licenseController = TextEditingController();
   final signUpFormKey = GlobalKey<FormState>();
   final updateNameFormKey = GlobalKey<FormState>();
   final updateEmailFormKey = GlobalKey<FormState>();
+  final vehicleInfoFormKey = GlobalKey<FormState>();
 
   // documents
 
@@ -43,7 +49,10 @@ class AuthController extends GetxController {
   String? profileImage;
   List<DocumentModel> listOfDocuments = [];
   DocumentModel selectedDocument = DocumentModel();
-
+  String? selectedVehicle;
+  List<String> dropDownVehicles= ['Car','Motorbike','Bicycle'];
+  LoadingService loadingService = LoadingService();
+  VehicleModel vehicleModel = VehicleModel();
 
   addDocumentsData(){
     if(listOfDocuments.isEmpty) {
@@ -56,6 +65,9 @@ class AuthController extends GetxController {
   }
   mapSelectedDocument(DocumentModel doc){
     selectedDocument = doc;
+  }
+  mapSelectedVehicle(String vehicle){
+    selectedVehicle = vehicle;
   }
   initializeCamera(int cameraIndex) async {
     controller = CameraController(cameras[cameraIndex], ResolutionPreset.medium,
@@ -82,7 +94,7 @@ class AuthController extends GetxController {
   registerWithPhoneCredentials() async {
     try {
       if (phoneController.text.isNotEmpty) {
-        print(phoneController.text);
+        loadingService.start();
         await auth.verifyPhoneNumber(
           phoneNumber: phoneController.text,
           verificationCompleted: (PhoneAuthCredential credential) async {
@@ -97,23 +109,33 @@ class AuthController extends GetxController {
                     .collection('users')
                     .doc(userModel.docId)
                     .set(userModel.mapToLocalStorage());
+                var result = await _collectionReference.doc(auth.currentUser!.uid).collection(vehicleInformationCollection).doc(auth.currentUser!.uid).get();
+                loadingService.stop();
                 update();
-                Get.offAll(() => HomeScreen());
+                if(result.exists){
+                  vehicleModel = VehicleModel.fromDocumentSnapShot(result);
+                  Get.offAll(() => const HomeScreen());
+                }else {
+                  Get.offAll(() => VehicleInfoScreen());
+                }
               } else {
+                loadingService.stop();
                 Get.offAll(() => SignUpScreen());
               }
             }
           },
           verificationFailed: (FirebaseAuthException e) {
             print(e.code);
+            loadingService.stop();
             Get.snackbar('Error', e.toString(),
                 backgroundColor: Colors.black, colorText: Colors.white);
           },
-          timeout: Duration(seconds: 30),
+          timeout: const Duration(seconds: 30),
           forceResendingToken: forceResendToken,
           codeSent: (String? verificationId, int? resendToken) {
             verificationIdRecieved = verificationId;
             forceResendToken = resendToken;
+            loadingService.stop();
             Get.to(() => OtpScreen());
           },
           codeAutoRetrievalTimeout: (String verificationId) {
@@ -122,10 +144,12 @@ class AuthController extends GetxController {
           },
         );
       } else {
+        loadingService.stop();
         Get.snackbar('Alert', 'Please Enter Number',
             backgroundColor: Colors.black, colorText: Colors.white);
       }
     } catch (e) {
+      loadingService.stop();
       Get.snackbar('Error', '${e.toString()}',
           backgroundColor: Colors.black, colorText: Colors.white);
     }
@@ -134,6 +158,7 @@ class AuthController extends GetxController {
   verifyPhoneNumber({required String otp}) async {
     try {
       if (otp.isNotEmpty) {
+        loadingService.start();
         PhoneAuthCredential credential = PhoneAuthProvider.credential(
             verificationId: verificationIdRecieved!, smsCode: otp);
         UserCredential userCredential =
@@ -144,21 +169,30 @@ class AuthController extends GetxController {
           if (data.exists) {
             userModel = UserModel.fromDocumentSnapshot(data);
             userModel.docId = auth.currentUser!.uid;
-            await db
-                .collection('users')
+            await db.collection('users')
                 .doc(userModel.docId)
                 .set(userModel.mapToLocalStorage());
+            var result = await _collectionReference.doc(userCredential.user!.uid).collection(vehicleInformationCollection).doc(auth.currentUser!.uid).get();
+            loadingService.stop();
             update();
-            Get.offAll(() => HomeScreen());
+            if(result.exists){
+              vehicleModel = VehicleModel.fromDocumentSnapShot(result);
+              Get.offAll(() => const HomeScreen());
+            }else {
+              Get.offAll(() => VehicleInfoScreen());
+            }
           } else {
+            loadingService.stop();
             Get.offAll(() => SignUpScreen());
           }
         }
       } else {
+        loadingService.stop();
         Get.snackbar('Alert', 'Enter The Code',
             backgroundColor: Colors.black, colorText: Colors.white);
       }
     } on FirebaseAuthException catch (e) {
+      loadingService.stop();
       Get.snackbar('Error', e.code,
           backgroundColor: Colors.black, colorText: Colors.white);
     }
@@ -180,23 +214,23 @@ class AuthController extends GetxController {
 
   addUser() async {
     if (auth.currentUser != null) {
+      loadingService.start();
       await _collectionReference
           .doc(auth.currentUser!.uid)
           .set(userModel.toMap())
           .then((value) async {
-        //     var data =
-        // await _collectionReference.doc(FirebaseAuth.instance.currentUser!.uid).get();
-        //             userModel = UserModel.fromDocumentSnapshot(data);
         userModel.docId = auth.currentUser!.uid;
         await db
             .collection('users')
             .doc(userModel.docId)
             .set(userModel.mapToLocalStorage());
+        loadingService.stop();
         update();
         Get.snackbar('Success', 'User Added',
             backgroundColor: Colors.amber, colorText: Colors.white);
-        Get.offAll(() => HomeScreen());
+        Get.offAll(() => VehicleInfoScreen());
       });
+      loadingService.stop();
     }
   }
 
@@ -284,9 +318,7 @@ class AuthController extends GetxController {
 
   uploadFileToFirebaseStorage() async {
     try {
-      // isButtonVisible = false;
-      // loadingService.start();
-      // update();
+      loadingService.start();
       if (file != null) {
         String name = path.basename(file!.path);
         selectedDocument.docFile = '';
@@ -300,13 +332,64 @@ class AuthController extends GetxController {
             // isButtonVisible = true;
             // loadingService.stop();
             // update();
+            loadingService.stop();
             Get.offAll(() => DocumentsScreen());
           }
         }
     } catch (e) {
+      loadingService.stop();
       Get.snackbar('Error', e.toString(),
           backgroundColor: Colors.lightBlue, colorText: Colors.white);
     }
     file = null;
+  }
+
+  validateVehicleForm() {
+    if(!vehicleInfoFormKey.currentState!.validate()){
+      return null;
+    }
+    else if(selectedVehicle == null){
+      Get.snackbar('Error', 'Please Select Vehicle',
+          backgroundColor: Colors.lightBlue, colorText: Colors.white);
+    }else{
+      Get.to(() => DocumentsScreen());
+    }
+  }
+
+  validateDocuments(){
+    bool file = true;
+    for (var element in listOfDocuments) {
+      element.docStatus = 'approved';
+      if(element.docFile == null){
+        file = false;
+        break;
+      }
+    }
+    if(file){
+       vehicleModel.vehicleType = selectedVehicle;
+       vehicleModel.registrationNumber = registrationController.text;
+       vehicleModel.listOfDocuments = listOfDocuments;
+       vehicleModel.licenseNumber = licenseController.text;
+       addVehicleInfo();
+    }
+    else if(file == false){
+      Get.snackbar('Error', 'PLease Upload All Document Files',
+          backgroundColor: Colors.lightBlue, colorText: Colors.white);
+    }
+  }
+
+  addVehicleInfo() async{
+    if(auth.currentUser != null){
+      loadingService.start();
+      await _collectionReference.doc(auth.currentUser!.uid)
+          .collection(vehicleInformationCollection).doc(auth.currentUser!.uid)
+          .set(vehicleModel.toMap())
+          .then((value){
+            loadingService.stop();
+        Get.snackbar('Success', 'Vehicle Information Added',
+            backgroundColor: Colors.lightBlue, colorText: Colors.white);
+      });
+    }
+    loadingService.stop();
   }
 }
