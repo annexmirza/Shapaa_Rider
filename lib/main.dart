@@ -15,13 +15,12 @@ import 'views/home_screen.dart';
 var cameras;
 
 void main() async {
-
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
       // options: DefaultFirebaseOptions.currentPlatform
       );
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-    cameras = await availableCameras();
+  cameras = await availableCameras();
 
   runApp(MyApp());
   FlutterNativeSplash.remove();
@@ -35,7 +34,7 @@ class MyApp extends StatelessWidget {
         builder: (context) => GetMaterialApp(
               debugShowCheckedModeBanner: false,
               // builder: EasyLoading.init(),
-              home: DocumentsScreen(),
+              home: landingPage(),
             ));
   }
 }
