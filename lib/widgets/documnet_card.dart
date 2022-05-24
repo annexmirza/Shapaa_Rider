@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shapaa_rider/constands.dart';
 import 'custom_text.dart';
 
 class DocumentCard extends StatelessWidget {
@@ -13,15 +14,15 @@ class DocumentCard extends StatelessWidget {
   bool? uploadingDoc, uploaded, isDateVisible;
   DocumentCard(
       {this.titletext,
-        this.showDate,
-        this.subtext,
-        required this.ontap,
-        this.requried,
-        required this.dateOnTap,
-        this.docName,
-        this.isDateVisible,
-        this.uploadingDoc,
-        this.uploaded});
+      this.showDate,
+      this.subtext,
+      required this.ontap,
+      this.requried,
+      required this.dateOnTap,
+      this.docName,
+      this.isDateVisible,
+      this.uploadingDoc,
+      this.uploaded});
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +30,11 @@ class DocumentCard extends StatelessWidget {
       width: 360.h,
       decoration: BoxDecoration(
           color: uploaded != null && uploaded!
-              ? Colors.grey
+              ? Colors.black45
               : uploadingDoc != null && uploadingDoc!
-              ? Colors.blue
-              : Colors.white,
-          border: Border.all(
-            color: Colors.blueAccent
-          ),
+                  ? Colors.blue
+                  : Colors.white70,
+          border: Border.all(color: appGreyColor),
           borderRadius: const BorderRadius.all(Radius.circular(10))),
       child: Padding(
         padding: const EdgeInsets.all(18.0),
@@ -51,7 +50,7 @@ class DocumentCard extends StatelessWidget {
                     child: Text(
                       titletext ?? '',
                       style: TextStyle(
-                          color: Colors.blueAccent,
+                          color: Colors.black,
                           fontSize: 17.sp,
                           fontWeight: FontWeight.bold),
                     ),
@@ -136,25 +135,25 @@ class DocumentCard extends StatelessWidget {
                   Container(
                     child: uploaded != null && uploaded!
                         ? Row(
-                      children: const [
-                        Text("Uploaded"),
-                        Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        ),
-                      ],
-                    )
+                            children: const [
+                              Text("Uploaded"),
+                              Icon(
+                                Icons.check,
+                                color: Colors.green,
+                              ),
+                            ],
+                          )
                         : uploadingDoc != null && uploadingDoc!
-                        ? Row(
-                      children: const [
-                        Text("Uploading"),
-                        Icon(
-                          Icons.file_upload_rounded,
-                          color: Colors.black,
-                        )
-                      ],
-                    )
-                        : Text(''),
+                            ? Row(
+                                children: const [
+                                  Text("Uploading"),
+                                  Icon(
+                                    Icons.file_upload_rounded,
+                                    color: Colors.black,
+                                  )
+                                ],
+                              )
+                            : Text(''),
                   ),
                   Align(
                     alignment: Alignment.topRight,
@@ -164,9 +163,9 @@ class DocumentCard extends StatelessWidget {
                         height: 45.h,
                         width: 120.w,
                         decoration: const BoxDecoration(
-                            color: Colors.blueAccent,
+                            color: Colors.deepOrangeAccent,
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10))),
+                                BorderRadius.all(Radius.circular(10))),
                         child: Row(
                           children: [
                             const Padding(
