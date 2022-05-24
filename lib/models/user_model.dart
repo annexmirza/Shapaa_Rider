@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/scheduler.dart';
 
+import 'document_model.dart';
+
 class UserModel{
 
   String? firstName;
@@ -11,8 +13,10 @@ class UserModel{
   String? docId;
   String? userType;
   String? profilePic;
+  List<DocumentModel>? listOfDocuments;
+  String? vehicleType;
 
-    UserModel({this.email,this.lastName,this.firstName,this.docRef,this.phoneNumber,this.docId,this.userType,this.profilePic});
+    UserModel({this.email,this.lastName,this.firstName,this.docRef,this.phoneNumber,this.docId,this.userType,this.profilePic,this.listOfDocuments});
 
   factory UserModel.fromDocumentSnapshot(DocumentSnapshot doc){
     return UserModel(
