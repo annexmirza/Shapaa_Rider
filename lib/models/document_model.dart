@@ -51,32 +51,24 @@ class DocumentModel {
     templatePic: json["template_pic"],
   );
 
-  factory DocumentModel.driverCollection(Map<String, dynamic> json){
+  factory DocumentModel.fromDocumentSnapShot(Map<String, dynamic> json){
     return DocumentModel(
       docTitle: json["doc_title"] ?? '',
       docStatus: json["doc_status"] ?? '',
       docDate: json['expiry_date'] != 0 ? DateTime.fromMillisecondsSinceEpoch(json['expiry_date']) : null,
       docFile: json['doc_file'] ?? '',
-      modifiedBy: json['modified_by'] ?? 'driver',
-      modifiedById: json['modified_by_id'] ?? '',
+      //modifiedBy: json['modified_by'] ?? 'driver',
+      //modifiedById: json['modified_by_id'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() => {
-    //"admin_id": adminId,
-    //"taxi_base": List<dynamic>.from(taxiBase!.map((x) => x.toJson())),
-    //"doc_description": docDescription ?? '',
-    //"doc_guide_description": docGuideDescription ?? '',
-    // "doc_type": docType ?? ''
-    // "expiry_required": expiryRequired,,
-    // "template_pic": templatePic,
-
     "doc_title": docTitle ?? '',
     "doc_status": docStatus ?? '',
     'expiry_date': docDate?.millisecondsSinceEpoch ?? 0,
     'doc_file': docFile ?? '',
-    'modified_by': modifiedBy ?? 'driver',
-    'modified_by_id': modifiedById ?? '',
+    //'modified_by': modifiedBy ?? 'driver',
+    //'modified_by_id': modifiedById ?? '',
   };
 }
 

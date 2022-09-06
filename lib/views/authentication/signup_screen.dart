@@ -12,12 +12,13 @@ import '../../widgets/custom_form_field.dart';
 import '../../widgets/custom_text.dart';
 
 class SignUpScreen extends StatelessWidget {
+
   final authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0XffBCBABA),
+      backgroundColor: const Color(0XffBCBABA),
       body: SingleChildScrollView(child: GetBuilder<AuthController>(
         builder: (controller) {
           return Column(
@@ -48,8 +49,7 @@ class SignUpScreen extends StatelessWidget {
                     ],
                   )),
               Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 16.sp, vertical: 10.h),
+                padding: EdgeInsets.symmetric(horizontal: 16.sp, vertical: 10.h),
                 child: Form(
                   key: authController.signUpFormKey,
                   child: Column(
