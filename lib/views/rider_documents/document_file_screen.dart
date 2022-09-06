@@ -1,20 +1,23 @@
 import 'package:camera/camera.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:shapaa_rider/constands.dart';
 import 'package:shapaa_rider/controllers/auth_controller.dart';
 import 'package:shapaa_rider/views/rider_documents/document_submit_screen.dart';
 import '../../main.dart';
 
-class DocumentFilePage extends StatefulWidget {
+import '../../widgets/custom_text.dart';
+
+class DocumentFileScreen extends StatefulWidget {
   @override
-  State<DocumentFilePage> createState() =>
-      _DocumentFilePageState();
+  State<DocumentFileScreen> createState() => _DocumentFileScreenState();
 }
 
-class _DocumentFilePageState extends State<DocumentFilePage> {
-
-  final authController = Get.find<AuthController>();
+class _DocumentFileScreenState extends State<DocumentFileScreen> {
+  // UserController userController = Get.put(UserController());
+  AuthController authController = Get.put(AuthController());
 
   @override
   void initState() {
@@ -24,7 +27,7 @@ class _DocumentFilePageState extends State<DocumentFilePage> {
 
   @override
   void dispose() {
-    authController.controller?.dispose();
+    authController.controller!.dispose();
     super.dispose();
   }
 
@@ -32,105 +35,105 @@ class _DocumentFilePageState extends State<DocumentFilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GetBuilder<AuthController>(builder: (controller) {
-        return Stack(
-          fit: StackFit.expand,
-          children: [
-            Container(
-              // height: 350.h,
-              // width: 350.h,
-              child: FutureBuilder<void>(
-                future: authController.initializeControllerFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    // If the Future is complete, display the preview.
-                    return CameraPreview(authController.controller!);
-                  } else {
-                    // Otherwise, display a loading indicator.
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                },
-              ),
+        return Stack(fit: StackFit.expand, children: [
+          Container(
+            // height: 350.h,
+            // width: 350.h,
+            child: FutureBuilder<void>(
+              future: authController.initializeControllerFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  // If the Future is complete, display the preview.
+                  return CameraPreview(authController.controller!);
+                } else {
+                  // Otherwise, display a loading indicator.
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
             ),
-            cameraOverlay(
-                padding: 18, aspectRatio: 0.6, color: Color(0x55000022)),
-            Positioned(
-              bottom: 6,
-              child: Align(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(8.0.r),
-                      child: InkWell(
-                        onTap: () {
-                          if (cameras.length > 1) {
-                            authController.selectedCamera =
-                            authController.selectedCamera == 1
-                                ? 0
-                                : 1; //Switch camera
-                            authController.initializeCamera(
-                                authController.selectedCamera == 1 ? 0 : 0);
-                          } else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text('No secondary camera found'),
-                              duration: Duration(seconds: 2),
-                            ));
-                          }
-                        },
-                        child: Container(
-                          // height: 60.h,
-                          // width: 60.h,
-                          // child: Icon(Icons.switch_camera_rounded,
-                          //     size: 35.r, color: Colors.white),
+          ),
+          cameraOverlay(
+              padding: 18, aspectRatio: 0.6, color: Color(0x55000022)),
+          Positioned(
+            bottom: 6,
+            child: Align(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0.r),
+                    child: InkWell(
+                      onTap: () {
+                        if (cameras.length > 1) {
+                          authController.selectedCamera =
+                              authController.selectedCamera == 0
+                                  ? 1
+                                  : 0; //Switch camera
+                          authController.initializeCamera(
+                              authController.selectedCamera == 1 ? 0 : 0);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('No secondary camera found'),
+                            duration: const Duration(seconds: 2),
+                          ));
+                        }
+                      },
+                      child: Container(
+                        height: 60.h,
+                        width: 60.h,
+                        child: Icon(
+                          Icons.switch_camera_rounded,
+                          size: 35.r,
+                          color: bgCreamColor,
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 115.w,
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: InkWell(
-                        onTap: () async {
-                          await authController.getImageFromInAppCamera();
-                          if (authController.file != null) {
-                            Get.to(() => DocumentSubmitPage());
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: Colors.blue, width: 3)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Container(
-                              height: 60.h,
-                              width: 60.h,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 10.0),
-                              decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    begin: Alignment.topRight,
-                                    end: Alignment.bottomLeft,
-                                    colors: [
-                                      Colors.blue,
-                                      Colors.red,
-                                    ],
-                                  ),
-                                  color: Colors.blue,
-                                  borderRadius: BorderRadius.circular(40.0)),
-                            ),
+                  ),
+                  SizedBox(
+                    width: 80.w,
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: InkWell(
+                      onTap: () async {
+                        await authController.getImageFromInAppCamera();
+                        if (authController.file != null) {
+                          Get.to(() => DocumentSubmitPage());
+                        }
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border:
+                                Border.all(color: appOrengeColor, width: 3)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Container(
+                            height: 60.h,
+                            width: 60.h,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 10.0),
+                            decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  begin: Alignment.topRight,
+                                  end: Alignment.bottomLeft,
+                                  colors: [
+                                    Colors.grey,
+                                    Colors.red,
+                                  ],
+                                ),
+                                color: appOrengeColor,
+                                borderRadius: BorderRadius.circular(40.0)),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 70.w,
-                    ),
+                  ),
+                  SizedBox(
+                    width: 70.w,
+                  ),
 
-                    /*
+                  /*
                     InkWell(
                       onTap: () {
 
@@ -173,47 +176,37 @@ class _DocumentFilePageState extends State<DocumentFilePage> {
                         //                   await driverController
                         //                       .getImageFromGallery();
 
-                        //                   if (driverController.file != null) {
-                        //                     Get.to(() =>
-                        //                         DocumentPageSubmitPage());
-                        //                   }
-                        //                 },
-                        //                 color: appDarkBlueColor,
-                        //                 buttonTitle: "Gallery"),
-                        //           ),
-                        //           customButton(
-                        //               onpress: () async {
-                        //                 await driverController
-                        //                     .getFileFromDevice();
-                        //                 if (driverController.file != null) {
-                        //                   Get.to(
-                        //                       () => DocumentPageSubmitPage());
-                        //                 }
-                        //               },
-                        //               buttonTitle: "Browse File")
-                        //         ],
-                        //       )),
-                        //   barrierColor: Colors.red[50],
-                        //   isDismissible: false,
-                        // );
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 220.w),
-                        child: Container(
-                          height: 60.h,
-                          width: 60.h,
-                          child: Icon(Icons.collections,
-                              size: 35.r, color: Colors.white),
+                          //         if (driverController.file != null) {
+                          //           Get.to(() => DocumentPageSubmitPage());
+                          //         }
+                          //       },
+                          //       firstIcon: Icons.collections,
+                          //       seconButtontitle: "Browse File",
+                          //       secondOntab: () async {
+                          //         Navigator.of(context).pop();
+                          //         await driverController.getImageFromDrive();
+                          //         if (driverController.file != null) {
+                          // //           Get.to(() => DocumentPageSubmitPage());
+                          // //         }
+                          //       },
+                          //       secondIcon: Icons.camera_enhance_rounded));
+                          // },
+                          child: Container(
+                            height: 60.h,
+                            width: 60.h,
+                            child: Icon(Icons.switch_camera_rounded,
+                                size: 35.r, color: Colors.red),
+                          ),
                         ),
                       ),
                     ),
                      */
-                  ],
-                ),
+                ],
               ),
             ),
-          ],
-        );
+          ),
+          // cameraOverlay(padding: 8, aspectRatio: 2.6, color: Color(0x55000022)),
+        ]);
       }),
     );
   }
@@ -221,8 +214,8 @@ class _DocumentFilePageState extends State<DocumentFilePage> {
 
 Widget cameraOverlay(
     {required double padding,
-      required double aspectRatio,
-      required Color color}) {
+    required double aspectRatio,
+    required Color color}) {
   return LayoutBuilder(builder: (context, constraints) {
     double parentAspectRatio = constraints.maxWidth / constraints.maxHeight;
     double horizontalPadding;
@@ -231,12 +224,12 @@ Widget cameraOverlay(
     if (parentAspectRatio < aspectRatio) {
       horizontalPadding = padding;
       verticalPadding = (constraints.maxHeight -
-          ((constraints.maxWidth - 2 * padding) / aspectRatio)) /
+              ((constraints.maxWidth - 2 * padding) / aspectRatio)) /
           2;
     } else {
       verticalPadding = padding;
       horizontalPadding = (constraints.maxWidth -
-          ((constraints.maxHeight - 2 * padding) * aspectRatio)) /
+              ((constraints.maxHeight - 2 * padding) * aspectRatio)) /
           2;
     }
     return Stack(fit: StackFit.expand, children: [
@@ -265,7 +258,7 @@ Widget cameraOverlay(
             horizontal: horizontalPadding, vertical: verticalPadding),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(1),
-            border: Border.all(color: Colors.blue)),
+            border: Border.all(color: appOrengeColor)),
       )
     ]);
   });

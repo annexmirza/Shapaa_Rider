@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
+import 'package:shapaa_rider/constands.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../widgets/custom_btn.dart';
@@ -23,13 +24,13 @@ class PhoneAuthScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                      height: 345.h,
+                      height: 155.h,
                       width: Get.width,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(30.r),
-                          bottomRight: Radius.circular(30.r),
+                          bottomRight: Radius.circular(0.r),
                         ),
                       ),
                       child: Column(
@@ -39,7 +40,7 @@ class PhoneAuthScreen extends StatelessWidget {
                           ),
                           Image.asset(
                             'assets/logo.png',
-                            height: 246.h,
+                            height: 86.h,
                             width: 347.w,
                           ),
                           Center(
@@ -83,13 +84,17 @@ class PhoneAuthScreen extends StatelessWidget {
                     height: 50.h,
                   ),
                   Padding(
-                    padding: EdgeInsets.all(48.sp),
-                    child: CustomBtn(
-                      text: 'Continue',
-                      onPressed: () {
-                        authController.registerWithPhoneCredentials();
-                      },
-                    ),
+                    padding: const EdgeInsets.all(38.0),
+                    child: customButton(
+                        buttonTitle: "Continue",
+                        color: appOrengeColor,
+                        icon: Icons.arrow_forward_rounded,
+                        onpress: () {
+                          authController.registerWithPhoneCredentials();
+                        },
+                        titlecolor: Colors.black,
+                        width: 150.w,
+                        height: 60.h),
                   ),
                 ],
               );

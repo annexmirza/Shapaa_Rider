@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:shapaa_rider/constands.dart';
 import 'package:shapaa_rider/views/rider_documents/document_file_screen.dart';
 import 'package:shapaa_rider/widgets/documnet_card.dart';
 import '../../controllers/auth_controller.dart';
@@ -9,7 +10,6 @@ import '../../widgets/custom_form_field.dart';
 import '../../widgets/custom_text.dart';
 
 class DocumentsScreen extends StatelessWidget {
-
   final authController = Get.put(AuthController());
 
   @override
@@ -46,38 +46,45 @@ class DocumentsScreen extends StatelessWidget {
                       // Center(child: Text('OTP',style: GoogleFonts.poppins(fontSize: 24.sp,fontWeight: FontWeight.bold,color: Colors.black),)),
                     ],
                   )),
-              SizedBox(height: 10.h,),
+              SizedBox(
+                height: 10.h,
+              ),
               Center(
                 child: CustomText(
                   text: 'Rider Documents',
                   fontSize: 25.sp,
+                  fontWeight: FontWeight.bold,
+                  color: appOrengeColor,
                 ),
               ),
-              SizedBox(height: 10.h,),
-              for(var document in authController.listOfDocuments)
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 5.h,horizontal: 15.w),
-                child: DocumentCard(
-                  ontap: (){
-                    authController.mapSelectedDocument(document);
-                    Get.to(() => DocumentFilePage());
-                  },
-                  uploadingDoc: document
-                      .docFile != null && document.docFile!.isEmpty
-                      ? true
-                      : false,
-                  uploaded: document.docFile != null &&
-                      document.docFile!.isNotEmpty
-                      ? true
-                      : false,
-                  dateOnTap: (){},
-                  titletext: document.docTitle,
-                  subtext: '',
-                ),
+              SizedBox(
+                height: 10.h,
               ),
+              for (var document in authController.listOfDocuments)
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 5.h, horizontal: 15.w),
+                  child: DocumentCard(
+                    ontap: () {
+                      authController.mapSelectedDocument(document);
+                      Get.to(() => DocumentFileScreen());
+                    },
+                    uploadingDoc:
+                        document.docFile != null && document.docFile!.isEmpty
+                            ? true
+                            : false,
+                    uploaded:
+                        document.docFile != null && document.docFile!.isNotEmpty
+                            ? true
+                            : false,
+                    dateOnTap: () {},
+                    titletext: document.docTitle,
+                    subtext: '',
+                  ),
+                ),
               Padding(
                 padding:
-                EdgeInsets.symmetric(horizontal: 48.sp, vertical: 10.h),
+                    EdgeInsets.symmetric(horizontal: 48.sp, vertical: 10.h),
                 child: CustomBtn(
                     text: 'Continue',
                     onPressed: () {
