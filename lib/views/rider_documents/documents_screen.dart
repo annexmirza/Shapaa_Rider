@@ -23,11 +23,6 @@ class DocumentsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-<<<<<<< HEAD
-              SizedBox(
-                height: 50.h,
-              ),
-=======
               Container(
                   height: 245.h,
                   width: Get.width,
@@ -52,7 +47,6 @@ class DocumentsScreen extends StatelessWidget {
                     ],
                   )),
               SizedBox(height: 10.h,),
->>>>>>> 347fa6ebb24a03c94371ef09971500e2db79bf36
               Center(
                 child: CustomText(
                   text: 'Rider Documents',
@@ -61,29 +55,6 @@ class DocumentsScreen extends StatelessWidget {
                   color: appOrengeColor,
                 ),
               ),
-<<<<<<< HEAD
-              for (var document in authController.listOfDocuments)
-                Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: DocumentCard(
-                    ontap: () {
-                      authController.mapSelectedDocument(document);
-                      Get.to(() => DocumentFileScreen());
-                    },
-                    uploadingDoc:
-                        document.docFile != null && document.docFile!.isEmpty
-                            ? true
-                            : false,
-                    uploaded:
-                        document.docFile != null && document.docFile!.isNotEmpty
-                            ? true
-                            : false,
-                    dateOnTap: () {},
-                    titletext: document.docTitle,
-                    subtext: '',
-                  ),
-                ),
-=======
               SizedBox(height: 10.h,),
               for(var document in authController.listOfDocuments)
               Padding(
@@ -91,7 +62,7 @@ class DocumentsScreen extends StatelessWidget {
                 child: DocumentCard(
                   ontap: (){
                     authController.mapSelectedDocument(document);
-                    Get.to(() => DocumentFilePage());
+                    Get.to(() => DocumentFileScreen());
                   },
                   uploadingDoc: document
                       .docFile != null && document.docFile!.isEmpty
@@ -106,7 +77,6 @@ class DocumentsScreen extends StatelessWidget {
                   subtext: '',
                 ),
               ),
->>>>>>> 347fa6ebb24a03c94371ef09971500e2db79bf36
               Padding(
                 padding:
                     EdgeInsets.symmetric(horizontal: 48.sp, vertical: 10.h),

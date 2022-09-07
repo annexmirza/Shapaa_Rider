@@ -3,7 +3,6 @@ import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,19 +40,15 @@ class AuthController extends GetxController {
   final updateEmailFormKey = GlobalKey<FormState>();
   final vehicleInfoFormKey = GlobalKey<FormState>();
 
+  // documents
+
   CameraController? controller;
-  Future? initializeControllerFuture;
-  int? selectedCamera = 0;
-  bool isButtonVisible = true;
+  int selectedCamera = 1;
+  Future<void>? initializeControllerFuture;
   File? file;
   String? profileImage;
   List<DocumentModel> listOfDocuments = [];
   DocumentModel selectedDocument = DocumentModel();
-<<<<<<< HEAD
-
-  addDocumentsData() {
-    if (listOfDocuments.isEmpty) {
-=======
   String? selectedVehicle;
   List<String> dropDownVehicles= ['Car','Motorbike','Bicycle'];
   LoadingService loadingService = LoadingService();
@@ -61,75 +56,40 @@ class AuthController extends GetxController {
 
   addDocumentsData(){
     if(listOfDocuments.isEmpty) {
->>>>>>> 347fa6ebb24a03c94371ef09971500e2db79bf36
       listOfDocuments.add(DocumentModel(docTitle: 'Vehicle Registration Copy'));
-      listOfDocuments
-          .add(DocumentModel(docTitle: 'Identification Card (Front)'));
-      listOfDocuments
-          .add(DocumentModel(docTitle: 'Identification Card (Back)'));
+      listOfDocuments.add(DocumentModel(docTitle: 'Identification Card (Front)'));
+      listOfDocuments.add(DocumentModel(docTitle: 'Identification Card (Back)'));
       listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Front)'));
       listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Back)'));
     }
   }
-
-  mapSelectedDocument(DocumentModel doc) {
+  mapSelectedDocument(DocumentModel doc){
     selectedDocument = doc;
   }
-<<<<<<< HEAD
-
-=======
   mapSelectedVehicle(String vehicle){
     selectedVehicle = vehicle;
   }
->>>>>>> 347fa6ebb24a03c94371ef09971500e2db79bf36
   initializeCamera(int cameraIndex) async {
     controller = CameraController(cameras[cameraIndex], ResolutionPreset.medium,
         imageFormatGroup: ImageFormatGroup.yuv420);
-
-    initializeControllerFuture = controller!.initialize();
+    initializeControllerFuture = controller?.initialize();
     update();
   }
 
   getImageFromInAppCamera() async {
     try {
       await initializeControllerFuture; //To make sure camera is initialized
-      XFile? xFile = await controller!.takePicture();
-      if (xFile != null) {
-        file = File(xFile.path);
+      var xFile = await controller?.takePicture();
+      file = File(xFile!.path);
+      if (file != null) {
+        file =File(xFile.path);
+
       }
     } catch (e) {
       Get.snackbar('Error', e.toString(),
           backgroundColor: Colors.lightBlue, colorText: Colors.white);
     }
   }
-  // documents
-
-//   CameraController? controller;
-//   int selectedCamera = 1;
-//   Future<void>? initializeControllerFuture;
-//   File? file;
-// String? profileImage;
-//   initializeCamera(int cameraIndex) async {
-//     controller = CameraController(cameras[cameraIndex], ResolutionPreset.medium,
-//         imageFormatGroup: ImageFormatGroup.yuv420);
-//     initializeControllerFuture = controller?.initialize();
-//     update();
-//   }
-
-  // getImageFromInAppCamera() async {
-  //   try {
-  //     await initializeControllerFuture; //To make sure camera is initialized
-  //     var xFile = await controller?.takePicture();
-  //     file = File(xFile!.path);
-  //     if (file != null) {
-  //       file =File(xFile.path);
-
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar('Error', e.toString(),
-  //         backgroundColor: Colors.lightBlue, colorText: Colors.white);
-  //   }
-  // }
 
   registerWithPhoneCredentials() async {
     try {
@@ -368,13 +328,6 @@ class AuthController extends GetxController {
             .putFile(file!);
         if (taskSnapshot != null) {
           var value = await taskSnapshot.ref.getDownloadURL();
-<<<<<<< HEAD
-          selectedDocument.docFile = value;
-          // isButtonVisible = true;
-          // loadingService.stop();
-          // update();
-          Get.offAll(() => DocumentsScreen());
-=======
             selectedDocument.docFile = value;
             // isButtonVisible = true;
             // loadingService.stop();
@@ -382,9 +335,7 @@ class AuthController extends GetxController {
             loadingService.stop();
             Get.offAll(() => DocumentsScreen());
           }
->>>>>>> 347fa6ebb24a03c94371ef09971500e2db79bf36
         }
-      }
     } catch (e) {
       loadingService.stop();
       Get.snackbar('Error', e.toString(),
