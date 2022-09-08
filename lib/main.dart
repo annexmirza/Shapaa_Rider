@@ -37,18 +37,13 @@ class MyApp extends StatelessWidget {
         designSize: Size(375, 812),
         builder: (context, child) => GetMaterialApp(
               debugShowCheckedModeBanner: false,
-<<<<<<< HEAD
+
               // builder: EasyLoading.init(),
               home: landingPage(),
-=======
-<<<<<<< HEAD
-              // builder: EasyLoading.init(),
-              home: landingPage(),
-=======
+
                builder: EasyLoading.init(),
-              home: OnBoardingScreen(),
->>>>>>> 347fa6ebb24a03c94371ef09971500e2db79bf36
->>>>>>> b485cabde7dfe194352a2ea16befb63792d491d2
+            
+
             ));
   }
 }

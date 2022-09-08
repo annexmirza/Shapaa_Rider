@@ -50,24 +50,13 @@ class AuthController extends GetxController {
   String? profileImage;
   List<DocumentModel> listOfDocuments = [];
   DocumentModel selectedDocument = DocumentModel();
-<<<<<<< HEAD
-
-  addDocumentsData() {
-    if (listOfDocuments.isEmpty) {
-=======
   String? selectedVehicle;
-  List<String> dropDownVehicles = ['Car', 'Motorbike', 'Bicycle'];
+  List<String> dropDownVehicles= ['Car','Motorbike','Bicycle'];
   LoadingService loadingService = LoadingService();
   VehicleModel vehicleModel = VehicleModel();
 
-<<<<<<< HEAD
-  addDocumentsData() {
-    if (listOfDocuments.isEmpty) {
-=======
   addDocumentsData(){
     if(listOfDocuments.isEmpty) {
->>>>>>> 347fa6ebb24a03c94371ef09971500e2db79bf36
->>>>>>> b485cabde7dfe194352a2ea16befb63792d491d2
       listOfDocuments.add(DocumentModel(docTitle: 'Vehicle Registration Copy'));
       listOfDocuments
           .add(DocumentModel(docTitle: 'Identification Card (Front)'));
@@ -81,21 +70,9 @@ class AuthController extends GetxController {
   mapSelectedDocument(DocumentModel doc) {
     selectedDocument = doc;
   }
-<<<<<<< HEAD
-
-  mapSelectedVehicle(String vehicle) {
-    selectedVehicle = vehicle;
-  }
-
-=======
-<<<<<<< HEAD
-
-=======
   mapSelectedVehicle(String vehicle){
     selectedVehicle = vehicle;
   }
->>>>>>> 347fa6ebb24a03c94371ef09971500e2db79bf36
->>>>>>> b485cabde7dfe194352a2ea16befb63792d491d2
   initializeCamera(int cameraIndex) async {
     controller = CameraController(cameras[cameraIndex], ResolutionPreset.medium,
         imageFormatGroup: ImageFormatGroup.yuv420);
@@ -107,14 +84,8 @@ class AuthController extends GetxController {
   getImageFromInAppCamera() async {
     try {
       await initializeControllerFuture; //To make sure camera is initialized
-<<<<<<< HEAD
-      var xFile = await controller?.takePicture();
-      file = File(xFile!.path);
-      if (file != null) {
-=======
       XFile? xFile = await controller!.takePicture();
       if (xFile != null) {
->>>>>>> b485cabde7dfe194352a2ea16befb63792d491d2
         file = File(xFile.path);
       }
     } catch (e) {
@@ -397,20 +368,6 @@ class AuthController extends GetxController {
             .putFile(file!);
         if (taskSnapshot != null) {
           var value = await taskSnapshot.ref.getDownloadURL();
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> b485cabde7dfe194352a2ea16befb63792d491d2
-          selectedDocument.docFile = value;
-          // isButtonVisible = true;
-          // loadingService.stop();
-          // update();
-<<<<<<< HEAD
-          loadingService.stop();
-          Get.offAll(() => DocumentsScreen());
-=======
-          Get.offAll(() => DocumentsScreen());
-=======
             selectedDocument.docFile = value;
             // isButtonVisible = true;
             // loadingService.stop();
@@ -418,11 +375,9 @@ class AuthController extends GetxController {
             loadingService.stop();
             Get.offAll(() => DocumentsScreen());
           }
->>>>>>> 347fa6ebb24a03c94371ef09971500e2db79bf36
->>>>>>> b485cabde7dfe194352a2ea16befb63792d491d2
         }
       }
-    } catch (e) {
+     catch (e) {
       loadingService.stop();
       Get.snackbar('Error', e.toString(),
           backgroundColor: Colors.lightBlue, colorText: Colors.white);
