@@ -6,8 +6,10 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:shapaa_rider/views/my_earning_screen.dart';
 
 import 'package:shapaa_rider/views/on_bording_screen.dart';
+import 'package:shapaa_rider/views/profile_screen.dart';
 import 'package:shapaa_rider/views/rider_documents/documents_screen.dart';
 import 'package:shapaa_rider/views/splash_screen/splash_screen.dart';
 
@@ -33,10 +35,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(375, 812),
-        builder: (context) => GetMaterialApp(
+        builder: (context, child) => GetMaterialApp(
               debugShowCheckedModeBanner: false,
-               builder: EasyLoading.init(),
-              home: OnBoardingScreen(),
+
+              builder: EasyLoading.init(),
+
+              //  builder: EasyLoading.init(),
+              home: landingPage(),
+
+              //  builder: EasyLoading.init(),
+              // home: OnBoardingScreen(),
             ));
   }
 }

@@ -9,7 +9,6 @@ import '../../widgets/custom_form_field.dart';
 import '../../widgets/custom_text.dart';
 
 class VehicleInfoScreen extends StatelessWidget {
-
   final authController = Get.find<AuthController>();
 
   @override
@@ -45,7 +44,9 @@ class VehicleInfoScreen extends StatelessWidget {
                       // Center(child: Text('OTP',style: GoogleFonts.poppins(fontSize: 24.sp,fontWeight: FontWeight.bold,color: Colors.black),)),
                     ],
                   )),
-              SizedBox(height: 10.h,),
+              SizedBox(
+                height: 10.h,
+              ),
               Center(
                 child: CustomText(
                   text: 'Vehicle Information',
@@ -55,18 +56,19 @@ class VehicleInfoScreen extends StatelessWidget {
               Form(
                 key: authController.vehicleInfoFormKey,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 10.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 30.w, vertical: 10.h),
                   child: Column(
                     children: [
                       DropdownSearch<String?>(
-                        mode: Mode.MENU,
-                        showSearchBox: true,
+                        // mode: Mode.MENU,
+                        // showSearchBox: true,
                         autoValidateMode: AutovalidateMode.onUserInteraction,
                         items: authController.dropDownVehicles,
-                        dropdownSearchDecoration: const InputDecoration(
-                          labelText: "---Please Select---",
-                          hintText: "Vehicles",
-                        ),
+                        // dropdownSearchDecoration: const InputDecoration(
+                        //   labelText: "---Please Select---",
+                        //   hintText: "Vehicles",
+                        // ),
                         onSaved: (value) {
                           authController.mapSelectedVehicle(value!);
                         },
@@ -76,19 +78,25 @@ class VehicleInfoScreen extends StatelessWidget {
                         },
                         //selectedItem: driverController.selectedItem,
                       ),
-                      SizedBox(height: 10.h,),
+                      SizedBox(
+                        height: 10.h,
+                      ),
                       CustomFormField(
                         labelText: 'Registration Number',
                         hintText: 'Enter your Registration Number',
                         controller: authController.registrationController,
                       ),
-                      SizedBox(height: 10.h,),
+                      SizedBox(
+                        height: 10.h,
+                      ),
                       CustomFormField(
                         labelText: 'License Number',
                         hintText: 'Enter your License Number',
                         controller: authController.licenseController,
                       ),
-                      SizedBox(height: 20.h,),
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       CustomBtn(
                           text: 'Continue',
                           onPressed: () {

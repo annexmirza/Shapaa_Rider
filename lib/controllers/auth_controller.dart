@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,7 +25,8 @@ import '../views/home_screen.dart';
 class AuthController extends GetxController {
   final auth = FirebaseAuth.instance;
   final db = Localstore.instance;
-  final CollectionReference _collectionReference = FirebaseFirestore.instance.collection('users');
+  final CollectionReference _collectionReference =
+      FirebaseFirestore.instance.collection('users');
   final vehicleInformationCollection = 'vehicle_information';
   String? verificationIdRecieved;
   int? forceResendToken;
@@ -39,57 +41,103 @@ class AuthController extends GetxController {
   final updateNameFormKey = GlobalKey<FormState>();
   final updateEmailFormKey = GlobalKey<FormState>();
   final vehicleInfoFormKey = GlobalKey<FormState>();
-
-  // documents
-
+  String? selectedVehicle;
+  LoadingService loadingService = LoadingService();
+  VehicleModel vehicleModel = VehicleModel();
+  List<String> dropDownVehicles = ['Car', 'Motorbike', 'Bicycle'];
   CameraController? controller;
-  int selectedCamera = 1;
-  Future<void>? initializeControllerFuture;
+  Future? initializeControllerFuture;
+  int? selectedCamera = 0;
+  bool isButtonVisible = true;
   File? file;
   String? profileImage;
   List<DocumentModel> listOfDocuments = [];
   DocumentModel selectedDocument = DocumentModel();
-  String? selectedVehicle;
-  List<String> dropDownVehicles= ['Car','Motorbike','Bicycle'];
-  LoadingService loadingService = LoadingService();
-  VehicleModel vehicleModel = VehicleModel();
 
-  addDocumentsData(){
-    if(listOfDocuments.isEmpty) {
+  // addDocumentsData() {
+  //   if (listOfDocuments.isEmpty) {
+
+  // String? selectedVehicle;
+  // List<String> dropDownVehicles = ['Car', 'Motorbike', 'Bicycle'];
+  // LoadingService loadingService = LoadingService();
+  // VehicleModel vehicleModel = VehicleModel();
+
+  // addDocumentsData() {
+  //   if (listOfDocuments.isEmpty) {
+
+  addDocumentsData() {
+    if (listOfDocuments.isEmpty) {
       listOfDocuments.add(DocumentModel(docTitle: 'Vehicle Registration Copy'));
-      listOfDocuments.add(DocumentModel(docTitle: 'Identification Card (Front)'));
-      listOfDocuments.add(DocumentModel(docTitle: 'Identification Card (Back)'));
+      listOfDocuments
+          .add(DocumentModel(docTitle: 'Identification Card (Front)'));
+      listOfDocuments
+          .add(DocumentModel(docTitle: 'Identification Card (Back)'));
       listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Front)'));
       listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Back)'));
     }
   }
-  mapSelectedDocument(DocumentModel doc){
+
+  mapSelectedDocument(DocumentModel doc) {
     selectedDocument = doc;
   }
-  mapSelectedVehicle(String vehicle){
+
+  mapSelectedVehicle(String vehicle) {
     selectedVehicle = vehicle;
   }
+
   initializeCamera(int cameraIndex) async {
     controller = CameraController(cameras[cameraIndex], ResolutionPreset.medium,
         imageFormatGroup: ImageFormatGroup.yuv420);
-    initializeControllerFuture = controller?.initialize();
+
+    initializeControllerFuture = controller!.initialize();
     update();
   }
 
   getImageFromInAppCamera() async {
     try {
       await initializeControllerFuture; //To make sure camera is initialized
+
       var xFile = await controller?.takePicture();
       file = File(xFile!.path);
       if (file != null) {
-        file =File(xFile.path);
-
+        XFile? xFile = await controller!.takePicture();
+        if (xFile != null) {
+          file = File(xFile.path);
+        }
       }
     } catch (e) {
       Get.snackbar('Error', e.toString(),
           backgroundColor: Colors.lightBlue, colorText: Colors.white);
     }
   }
+  // documents
+
+//   CameraController? controller;
+//   int selectedCamera = 1;
+//   Future<void>? initializeControllerFuture;
+//   File? file;
+// String? profileImage;
+//   initializeCamera(int cameraIndex) async {
+//     controller = CameraController(cameras[cameraIndex], ResolutionPreset.medium,
+//         imageFormatGroup: ImageFormatGroup.yuv420);
+//     initializeControllerFuture = controller?.initialize();
+//     update();
+//   }
+
+  // getImageFromInAppCamera() async {
+  //   try {
+  //     await initializeControllerFuture; //To make sure camera is initialized
+  //     var xFile = await controller?.takePicture();
+  //     file = File(xFile!.path);
+  //     if (file != null) {
+  //       file =File(xFile.path);
+
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar('Error', e.toString(),
+  //         backgroundColor: Colors.lightBlue, colorText: Colors.white);
+  //   }
+  // }
 
   registerWithPhoneCredentials() async {
     try {
@@ -109,13 +157,17 @@ class AuthController extends GetxController {
                     .collection('users')
                     .doc(userModel.docId)
                     .set(userModel.mapToLocalStorage());
-                var result = await _collectionReference.doc(auth.currentUser!.uid).collection(vehicleInformationCollection).doc(auth.currentUser!.uid).get();
+                var result = await _collectionReference
+                    .doc(auth.currentUser!.uid)
+                    .collection(vehicleInformationCollection)
+                    .doc(auth.currentUser!.uid)
+                    .get();
                 loadingService.stop();
                 update();
-                if(result.exists){
+                if (result.exists) {
                   vehicleModel = VehicleModel.fromDocumentSnapShot(result);
-                  Get.offAll(() => const HomeScreen());
-                }else {
+                  Get.offAll(() => HomeScreen());
+                } else {
                   Get.offAll(() => VehicleInfoScreen());
                 }
               } else {
@@ -151,7 +203,8 @@ class AuthController extends GetxController {
     } catch (e) {
       loadingService.stop();
       Get.snackbar('Error', '${e.toString()}',
-          backgroundColor: Colors.black, colorText: Colors.white);
+          backgroundColor: Colors.black, colorText: Colors.orange);
+      print("shappa code${e.toString()}");
     }
   }
 
@@ -169,16 +222,21 @@ class AuthController extends GetxController {
           if (data.exists) {
             userModel = UserModel.fromDocumentSnapshot(data);
             userModel.docId = auth.currentUser!.uid;
-            await db.collection('users')
+            await db
+                .collection('users')
                 .doc(userModel.docId)
                 .set(userModel.mapToLocalStorage());
-            var result = await _collectionReference.doc(userCredential.user!.uid).collection(vehicleInformationCollection).doc(auth.currentUser!.uid).get();
+            var result = await _collectionReference
+                .doc(userCredential.user!.uid)
+                .collection(vehicleInformationCollection)
+                .doc(auth.currentUser!.uid)
+                .get();
             loadingService.stop();
             update();
-            if(result.exists){
+            if (result.exists) {
               vehicleModel = VehicleModel.fromDocumentSnapShot(result);
-              Get.offAll(() => const HomeScreen());
-            }else {
+              Get.offAll(() => HomeScreen());
+            } else {
               Get.offAll(() => VehicleInfoScreen());
             }
           } else {
@@ -328,14 +386,25 @@ class AuthController extends GetxController {
             .putFile(file!);
         if (taskSnapshot != null) {
           var value = await taskSnapshot.ref.getDownloadURL();
-            selectedDocument.docFile = value;
-            // isButtonVisible = true;
-            // loadingService.stop();
-            // update();
-            loadingService.stop();
-            Get.offAll(() => DocumentsScreen());
-          }
+
+          selectedDocument.docFile = value;
+          // isButtonVisible = true;
+          // loadingService.stop();
+          // update();
+
+          loadingService.stop();
+          Get.offAll(() => DocumentsScreen());
+
+          Get.offAll(() => DocumentsScreen());
+
+          selectedDocument.docFile = value;
+          // isButtonVisible = true;
+          // loadingService.stop();
+          // update();
+          loadingService.stop();
+          Get.offAll(() => DocumentsScreen());
         }
+      }
     } catch (e) {
       loadingService.stop();
       Get.snackbar('Error', e.toString(),
@@ -345,47 +414,48 @@ class AuthController extends GetxController {
   }
 
   validateVehicleForm() {
-    if(!vehicleInfoFormKey.currentState!.validate()){
+    if (!vehicleInfoFormKey.currentState!.validate()) {
       return null;
-    }
-    else if(selectedVehicle == null){
+    } else if (selectedVehicle == null) {
       Get.snackbar('Error', 'Please Select Vehicle',
           backgroundColor: Colors.lightBlue, colorText: Colors.white);
-    }else{
+    } else {
       Get.to(() => DocumentsScreen());
     }
   }
 
-  validateDocuments(){
+  validateDocuments() {
     bool file = true;
     for (var element in listOfDocuments) {
       element.docStatus = 'approved';
-      if(element.docFile == null){
+      if (element.docFile == null) {
         file = false;
         break;
       }
     }
-    if(file){
-       vehicleModel.vehicleType = selectedVehicle;
-       vehicleModel.registrationNumber = registrationController.text;
-       vehicleModel.listOfDocuments = listOfDocuments;
-       vehicleModel.licenseNumber = licenseController.text;
-       addVehicleInfo();
-    }
-    else if(file == false){
+    if (file) {
+      vehicleModel.vehicleType = selectedVehicle;
+      vehicleModel.registrationNumber = registrationController.text;
+      vehicleModel.listOfDocuments = listOfDocuments;
+      vehicleModel.licenseNumber = licenseController.text;
+      addVehicleInfo();
+      Get.to(HomeScreen());
+    } else if (file == false) {
       Get.snackbar('Error', 'PLease Upload All Document Files',
           backgroundColor: Colors.lightBlue, colorText: Colors.white);
     }
   }
 
-  addVehicleInfo() async{
-    if(auth.currentUser != null){
+  addVehicleInfo() async {
+    if (auth.currentUser != null) {
       loadingService.start();
-      await _collectionReference.doc(auth.currentUser!.uid)
-          .collection(vehicleInformationCollection).doc(auth.currentUser!.uid)
+      await _collectionReference
+          .doc(auth.currentUser!.uid)
+          .collection(vehicleInformationCollection)
+          .doc(auth.currentUser!.uid)
           .set(vehicleModel.toMap())
-          .then((value){
-            loadingService.stop();
+          .then((value) {
+        loadingService.stop();
         Get.snackbar('Success', 'Vehicle Information Added',
             backgroundColor: Colors.lightBlue, colorText: Colors.white);
       });
