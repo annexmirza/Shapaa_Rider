@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class OrderModel {
   String? orderItems;
@@ -13,7 +14,8 @@ class OrderModel {
   GeoPoint? dropOffLocation;
   DocumentReference? docRef;
   double? distance;
-
+  int? date;
+  String? orderDate;
   OrderModel(
       {this.deliveryFees,
       this.orderItems,
@@ -26,7 +28,9 @@ class OrderModel {
       this.docRef,
       this.customerContact,
       this.orderStatus,
-      this.distance});
+      this.distance,
+      this.date,
+      this.orderDate});
 
   factory OrderModel.fromDocumentSnapshot(DocumentSnapshot doc) {
     return OrderModel(
@@ -36,11 +40,16 @@ class OrderModel {
       dropOffLocation: doc['dropoff_location'],
       shopRef: doc['shop_ref'],
       userRef: doc['user_ref'],
-      deliveryFees: doc['delivery_fees'] as double? ?? 0.00,
-      subTotal: doc['sub_total'] as double? ?? 0.00,
-      total: doc['total'] as double? ?? 0.00,
+      deliveryFees: doc['delivery_fees'].toDouble() ?? 0.00,
+      subTotal: doc['sub_total'].toDouble() ?? 0.00,
+      total: doc['total'].toDouble() ?? 0.00,
       customerContact: doc['customer_contact'],
       orderStatus: doc['order_status'],
+      date: doc['date'],
+      orderDate: doc['date'] != null
+          ? DateFormat("yyyy-MM-dd")
+              .format(DateTime.fromMillisecondsSinceEpoch(doc['date']))
+          : null,
     );
   }
 

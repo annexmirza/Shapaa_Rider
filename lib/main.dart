@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -17,12 +18,16 @@ import 'controllers/auth_controller.dart';
 import 'views/home_screen.dart';
 
 var cameras;
+bool shouldUseFirebaseEmulator = false; // before main()
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
       // options: DefaultFirebaseOptions.currentPlatform
       );
+  if (shouldUseFirebaseEmulator) {
+    await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  }
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   cameras = await availableCameras();
 
@@ -38,12 +43,13 @@ class MyApp extends StatelessWidget {
         builder: (context, child) => GetMaterialApp(
               debugShowCheckedModeBanner: false,
 
-              // builder: EasyLoading.init(),
+              builder: EasyLoading.init(),
+
+              //  builder: EasyLoading.init(),
               home: landingPage(),
 
-               builder: EasyLoading.init(),
-            
-
+              //  builder: EasyLoading.init(),
+              // home: OnBoardingScreen(),
             ));
   }
 }

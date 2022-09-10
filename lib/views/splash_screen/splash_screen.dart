@@ -34,7 +34,7 @@ class SplashScreen extends StatelessWidget {
                     fontWeight: FontWeight.w900,
                     fontSize: 30.sp,
                     text: '''Welcome To
-Shapaa''',
+                       Shapaa''',
                   ),
                 ),
                 SizedBox(
@@ -52,13 +52,17 @@ Shapaa''',
                   height: 20.h,
                 ),
                 Container(
-                    width: 350.h,
-                    height: 190.h,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage("assets/welcome2.png"),
-                          fit: BoxFit.cover),
-                    )),
+                  width: 350.h,
+                  height: 190.h,
+                  child: Image.network(
+                      'https://googleflutter.com/sample_image.jpg'),
+                  // decoration: BoxDecoration(
+                  //   image: DecorationImage(
+                  //       image:
+
+                  //       fit: BoxFit.cover),
+                  // )
+                ),
               ],
             ),
             Column(

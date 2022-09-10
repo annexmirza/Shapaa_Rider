@@ -49,6 +49,9 @@ class DocumentsScreen extends StatelessWidget {
               SizedBox(
                 height: 10.h,
               ),
+              SizedBox(
+                height: 10.h,
+              ),
               Center(
                 child: CustomText(
                   text: 'Rider Documents',
@@ -57,6 +60,31 @@ class DocumentsScreen extends StatelessWidget {
                   color: appOrengeColor,
                 ),
               ),
+              SizedBox(
+                height: 10.h,
+              ),
+              for (var document in authController.listOfDocuments)
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 5.h, horizontal: 15.w),
+                  child: DocumentCard(
+                    ontap: () {
+                      authController.mapSelectedDocument(document);
+                      Get.to(() => DocumentFileScreen());
+                    },
+                    uploadingDoc:
+                        document.docFile != null && document.docFile!.isEmpty
+                            ? true
+                            : false,
+                    uploaded:
+                        document.docFile != null && document.docFile!.isNotEmpty
+                            ? true
+                            : false,
+                    dateOnTap: () {},
+                    titletext: document.docTitle,
+                    subtext: '',
+                  ),
+                ),
               SizedBox(
                 height: 10.h,
               ),

@@ -41,7 +41,10 @@ class AuthController extends GetxController {
   final updateNameFormKey = GlobalKey<FormState>();
   final updateEmailFormKey = GlobalKey<FormState>();
   final vehicleInfoFormKey = GlobalKey<FormState>();
-
+  String? selectedVehicle;
+  LoadingService loadingService = LoadingService();
+  VehicleModel vehicleModel = VehicleModel();
+  List<String> dropDownVehicles = ['Car', 'Motorbike', 'Bicycle'];
   CameraController? controller;
   Future? initializeControllerFuture;
   int? selectedCamera = 0;
@@ -50,13 +53,20 @@ class AuthController extends GetxController {
   String? profileImage;
   List<DocumentModel> listOfDocuments = [];
   DocumentModel selectedDocument = DocumentModel();
-  String? selectedVehicle;
-  List<String> dropDownVehicles= ['Car','Motorbike','Bicycle'];
-  LoadingService loadingService = LoadingService();
-  VehicleModel vehicleModel = VehicleModel();
 
-  addDocumentsData(){
-    if(listOfDocuments.isEmpty) {
+  // addDocumentsData() {
+  //   if (listOfDocuments.isEmpty) {
+
+  // String? selectedVehicle;
+  // List<String> dropDownVehicles = ['Car', 'Motorbike', 'Bicycle'];
+  // LoadingService loadingService = LoadingService();
+  // VehicleModel vehicleModel = VehicleModel();
+
+  // addDocumentsData() {
+  //   if (listOfDocuments.isEmpty) {
+
+  addDocumentsData() {
+    if (listOfDocuments.isEmpty) {
       listOfDocuments.add(DocumentModel(docTitle: 'Vehicle Registration Copy'));
       listOfDocuments
           .add(DocumentModel(docTitle: 'Identification Card (Front)'));
@@ -70,9 +80,11 @@ class AuthController extends GetxController {
   mapSelectedDocument(DocumentModel doc) {
     selectedDocument = doc;
   }
-  mapSelectedVehicle(String vehicle){
+
+  mapSelectedVehicle(String vehicle) {
     selectedVehicle = vehicle;
   }
+
   initializeCamera(int cameraIndex) async {
     controller = CameraController(cameras[cameraIndex], ResolutionPreset.medium,
         imageFormatGroup: ImageFormatGroup.yuv420);
@@ -84,9 +96,14 @@ class AuthController extends GetxController {
   getImageFromInAppCamera() async {
     try {
       await initializeControllerFuture; //To make sure camera is initialized
-      XFile? xFile = await controller!.takePicture();
-      if (xFile != null) {
-        file = File(xFile.path);
+
+      var xFile = await controller?.takePicture();
+      file = File(xFile!.path);
+      if (file != null) {
+        XFile? xFile = await controller!.takePicture();
+        if (xFile != null) {
+          file = File(xFile.path);
+        }
       }
     } catch (e) {
       Get.snackbar('Error', e.toString(),
@@ -186,7 +203,8 @@ class AuthController extends GetxController {
     } catch (e) {
       loadingService.stop();
       Get.snackbar('Error', '${e.toString()}',
-          backgroundColor: Colors.black, colorText: Colors.white);
+          backgroundColor: Colors.black, colorText: Colors.orange);
+      print("shappa code${e.toString()}");
     }
   }
 
@@ -368,16 +386,26 @@ class AuthController extends GetxController {
             .putFile(file!);
         if (taskSnapshot != null) {
           var value = await taskSnapshot.ref.getDownloadURL();
-            selectedDocument.docFile = value;
-            // isButtonVisible = true;
-            // loadingService.stop();
-            // update();
-            loadingService.stop();
-            Get.offAll(() => DocumentsScreen());
-          }
+
+          selectedDocument.docFile = value;
+          // isButtonVisible = true;
+          // loadingService.stop();
+          // update();
+
+          loadingService.stop();
+          Get.offAll(() => DocumentsScreen());
+
+          Get.offAll(() => DocumentsScreen());
+
+          selectedDocument.docFile = value;
+          // isButtonVisible = true;
+          // loadingService.stop();
+          // update();
+          loadingService.stop();
+          Get.offAll(() => DocumentsScreen());
         }
       }
-     catch (e) {
+    } catch (e) {
       loadingService.stop();
       Get.snackbar('Error', e.toString(),
           backgroundColor: Colors.lightBlue, colorText: Colors.white);
@@ -411,6 +439,7 @@ class AuthController extends GetxController {
       vehicleModel.listOfDocuments = listOfDocuments;
       vehicleModel.licenseNumber = licenseController.text;
       addVehicleInfo();
+      Get.to(HomeScreen());
     } else if (file == false) {
       Get.snackbar('Error', 'PLease Upload All Document Files',
           backgroundColor: Colors.lightBlue, colorText: Colors.white);
