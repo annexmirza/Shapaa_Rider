@@ -63,6 +63,7 @@ class VehicleInfoScreen extends StatelessWidget {
                       DropdownSearch<String?>(
                         // mode: Mode.MENU,
                         // showSearchBox: true,
+                        selectedItem: authController.selectedVehicle,
                         autoValidateMode: AutovalidateMode.onUserInteraction,
                         items: authController.dropDownVehicles,
                         // dropdownSearchDecoration: const InputDecoration(

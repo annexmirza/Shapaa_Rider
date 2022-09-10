@@ -48,7 +48,7 @@ class AuthController extends GetxController {
   CameraController? controller;
   Future? initializeControllerFuture;
   int? selectedCamera = 0;
-  bool isButtonVisible = true;
+  bool isButtonVisible = true,updateDocuments = false,updateVehicleInfo = false;
   File? file;
   String? profileImage;
   List<DocumentModel> listOfDocuments = [];
@@ -65,8 +65,24 @@ class AuthController extends GetxController {
   // addDocumentsData() {
   //   if (listOfDocuments.isEmpty) {
 
+
+  getVehicleInfo() async{
+
+    await _collectionReference
+        .doc(auth.currentUser!.uid)
+        .collection(vehicleInformationCollection)
+        .doc(auth.currentUser!.uid)
+        .get()
+        .then((value){
+           vehicleModel = VehicleModel.fromDocumentSnapShot(value);
+           selectedVehicle = vehicleModel.vehicleType;
+           registrationController.text = vehicleModel.registrationNumber!;
+           licenseController.text = vehicleModel.licenseNumber!;
+        });
+    update();
+  }
   addDocumentsData() {
-    if (listOfDocuments.isEmpty) {
+      listOfDocuments.clear();
       listOfDocuments.add(DocumentModel(docTitle: 'Vehicle Registration Copy'));
       listOfDocuments
           .add(DocumentModel(docTitle: 'Identification Card (Front)'));
@@ -74,7 +90,7 @@ class AuthController extends GetxController {
           .add(DocumentModel(docTitle: 'Identification Card (Back)'));
       listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Front)'));
       listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Back)'));
-    }
+      print('length ${listOfDocuments.length}');
   }
 
   mapSelectedDocument(DocumentModel doc) {
@@ -393,16 +409,12 @@ class AuthController extends GetxController {
           // update();
 
           loadingService.stop();
-          Get.offAll(() => DocumentsScreen());
-
-          Get.offAll(() => DocumentsScreen());
-
-          selectedDocument.docFile = value;
-          // isButtonVisible = true;
-          // loadingService.stop();
-          // update();
-          loadingService.stop();
-          Get.offAll(() => DocumentsScreen());
+          if(updateVehicleInfo){
+            Get.back();
+            Get.back();
+          }else {
+            Get.offAll(() => DocumentsScreen());
+          }
         }
       }
     } catch (e) {
@@ -424,25 +436,44 @@ class AuthController extends GetxController {
     }
   }
 
-  validateDocuments() {
-    bool file = true;
-    for (var element in listOfDocuments) {
-      element.docStatus = 'approved';
-      if (element.docFile == null) {
-        file = false;
-        break;
+  validateDocuments() async{
+    if(updateVehicleInfo == false) {
+      bool file = true;
+      for (var element in listOfDocuments) {
+        element.docStatus = 'approved';
+        if (element.docFile == null) {
+          file = false;
+          break;
+        }
       }
-    }
-    if (file) {
-      vehicleModel.vehicleType = selectedVehicle;
-      vehicleModel.registrationNumber = registrationController.text;
-      vehicleModel.listOfDocuments = listOfDocuments;
-      vehicleModel.licenseNumber = licenseController.text;
-      addVehicleInfo();
-      Get.to(HomeScreen());
-    } else if (file == false) {
-      Get.snackbar('Error', 'PLease Upload All Document Files',
-          backgroundColor: Colors.lightBlue, colorText: Colors.white);
+      if (file) {
+        vehicleModel.vehicleType = selectedVehicle;
+        vehicleModel.registrationNumber = registrationController.text;
+        vehicleModel.listOfDocuments = listOfDocuments;
+        vehicleModel.licenseNumber = licenseController.text;
+        addVehicleInfo();
+        Get.to(() => HomeScreen());
+      }
+      else if (file == false) {
+        Get.snackbar('Error', 'PLease Upload All Document Files',
+            backgroundColor: Colors.lightBlue, colorText: Colors.white);
+      }
+    }else if(updateVehicleInfo){
+      print("true was true");
+      bool file = true;
+      for (var element in vehicleModel.listOfDocuments!) {
+        if (element.docFile == null) {
+          file = false;
+          break;
+        }
+      }
+      if (file) {
+        await addVehicleInfo();
+      }
+      else if (file == false) {
+        Get.snackbar('Error', 'PLease Upload All Document Files',
+            backgroundColor: Colors.lightBlue, colorText: Colors.white);
+      }
     }
   }
 

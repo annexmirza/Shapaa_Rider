@@ -10,6 +10,8 @@ import 'package:shapaa_rider/controllers/order_controller.dart';
 import 'package:shapaa_rider/models/order_model.dart';
 import 'package:shapaa_rider/views/my_deliveries.dart';
 import 'package:shapaa_rider/views/my_earning_screen.dart';
+import 'package:shapaa_rider/views/rider_documents/documents_screen.dart';
+import 'package:shapaa_rider/views/rider_documents/vehicle_info_screen.dart';
 import 'package:shapaa_rider/widgets/custom_btn.dart';
 import 'package:shapaa_rider/widgets/custom_text.dart';
 
@@ -252,7 +254,10 @@ class HomeScreen extends StatelessWidget {
               height: 20.h,
             ),
             InkWell(
-                onTap: () {
+                onTap: () async{
+                  authController.updateVehicleInfo = true;
+                  authController.getVehicleInfo();
+                  Get.to(() => VehicleInfoScreen());
                   // Get.to(() => InboxScreen());
                   // Get.to(MyBookingScreen());
                 },
@@ -267,7 +272,7 @@ class HomeScreen extends StatelessWidget {
                         width: 15.w,
                       ),
                       Text(
-                        'Vehical Documents',
+                        'Vehical Information',
                         style: GoogleFonts.comicNeue(
                           color: Colors.black,
                           fontSize: 15.sp,
