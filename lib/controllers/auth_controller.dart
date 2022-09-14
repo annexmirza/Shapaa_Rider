@@ -79,7 +79,6 @@ class AuthController extends GetxController {
            registrationController.text = vehicleModel.registrationNumber!;
            licenseController.text = vehicleModel.licenseNumber!;
         });
-    update();
   }
   addDocumentsData() {
       listOfDocuments.clear();
@@ -322,6 +321,7 @@ class AuthController extends GetxController {
           isLoggedIn = true;
         }
       });
+      await getVehicleInfo();
       return isLoggedIn;
     }
     return isLoggedIn;

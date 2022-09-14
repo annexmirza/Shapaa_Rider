@@ -69,7 +69,7 @@ Widget landingPage() {
             snapshot.data == false) {
           return SplashScreen();
         }
-        return Container();
+        return const Center(child: CircularProgressIndicator());
       },
     );
   });

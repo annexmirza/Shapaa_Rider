@@ -76,7 +76,7 @@ class HomeScreen extends StatelessWidget {
                             ],
                           ),
                           CustomText(
-                              text: authController.userModel.userType!.toUpperCase())
+                              text: authController.vehicleModel.vehicleType!.toUpperCase())
                         ],
                       ),
                     )
@@ -223,7 +223,7 @@ class HomeScreen extends StatelessWidget {
                         width: 15.w,
                       ),
                       Text(
-                        'Personal Info',
+                        'Personal Information',
                         style: GoogleFonts.comicNeue(
                           color: Colors.black,
                           fontSize: 15.sp,
@@ -236,7 +236,6 @@ class HomeScreen extends StatelessWidget {
             InkWell(
                 onTap: () async{
                   authController.updateVehicleInfo = true;
-                  authController.getVehicleInfo();
                   Get.to(() => VehicleInfoScreen());
                   // Get.to(() => InboxScreen());
                   // Get.to(MyBookingScreen());
@@ -252,7 +251,7 @@ class HomeScreen extends StatelessWidget {
                         width: 15.w,
                       ),
                       Text(
-                        'Vehical Information',
+                        'Vehicle Information',
                         style: GoogleFonts.comicNeue(
                           color: Colors.black,
                           fontSize: 15.sp,
