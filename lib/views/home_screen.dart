@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   OrderController orderController = Get.put(OrderController());
   MapController mapController = Get.put(MapController());
-  AuthController authController = Get.put(AuthController());
+  AuthController authController = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
     orderController.getNewOrders();
@@ -47,7 +47,7 @@ class HomeScreen extends StatelessWidget {
                         color: Colors.redAccent,
                         shape: BoxShape.circle,
                         // borderRadius: BorderRadius.all(Radius.circular(20.r)),
-                        image: authController.userModel.profilePic != null
+                        image: authController.userModel.profilePic != null && authController.userModel.profilePic!.isNotEmpty
                             ? DecorationImage(
                                 image: NetworkImage(
                                     authController.userModel.profilePic!),
@@ -67,26 +67,7 @@ class HomeScreen extends StatelessWidget {
                           CustomText(text: authController.userModel.firstName!),
                           Row(
                             children: [
-                              Icon(
-                                Icons.star,
-                                color: appOrengeColor,
-                                size: 20.r,
-                              ),
-                              Icon(
-                                Icons.star,
-                                color: appOrengeColor,
-                                size: 20.r,
-                              ),
-                              Icon(
-                                Icons.star,
-                                color: appOrengeColor,
-                                size: 20.r,
-                              ),
-                              Icon(
-                                Icons.star,
-                                color: appOrengeColor,
-                                size: 20.r,
-                              ),
+                              for(int i=0;i<5;i++)
                               Icon(
                                 Icons.star,
                                 color: appOrengeColor,
@@ -95,8 +76,7 @@ class HomeScreen extends StatelessWidget {
                             ],
                           ),
                           CustomText(
-                              text: authController.userModel.vehicleType
-                                  .toString())
+                              text: authController.userModel.userType!.toUpperCase())
                         ],
                       ),
                     )
@@ -209,7 +189,7 @@ class HomeScreen extends StatelessWidget {
                 child: Padding(
                     padding: EdgeInsets.only(left: 18.0.h, bottom: 5.h),
                     child: Row(children: [
-                      Icon(
+                      const Icon(
                         Icons.money,
                         color: Colors.black,
                       ),
@@ -235,7 +215,7 @@ class HomeScreen extends StatelessWidget {
                 child: Padding(
                     padding: EdgeInsets.only(left: 18.0.h, bottom: 5.h),
                     child: Row(children: [
-                      Icon(
+                      const Icon(
                         Icons.person,
                         color: Colors.black,
                       ),
@@ -243,7 +223,7 @@ class HomeScreen extends StatelessWidget {
                         width: 15.w,
                       ),
                       Text(
-                        'Personal Documents',
+                        'Personal Info',
                         style: GoogleFonts.comicNeue(
                           color: Colors.black,
                           fontSize: 15.sp,
@@ -273,6 +253,31 @@ class HomeScreen extends StatelessWidget {
                       ),
                       Text(
                         'Vehical Information',
+                        style: GoogleFonts.comicNeue(
+                          color: Colors.black,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                    ]))),
+            SizedBox(
+              height: 20.h,
+            ),
+            InkWell(
+                onTap: () {
+                  authController.signOut();
+                },
+                child: Padding(
+                    padding: EdgeInsets.only(left: 18.0.h, bottom: 5.h),
+                    child: Row(children: [
+                      const Icon(
+                        Icons.logout,
+                        color: Colors.black,
+                      ),
+                      SizedBox(
+                        width: 15.w,
+                      ),
+                      Text(
+                        'Sign Out',
                         style: GoogleFonts.comicNeue(
                           color: Colors.black,
                           fontSize: 15.sp,

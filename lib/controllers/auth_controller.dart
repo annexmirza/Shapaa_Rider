@@ -310,7 +310,6 @@ class AuthController extends GetxController {
 
   Future<bool> checkIfUserIsLoggedIn() async {
     bool isLoggedIn = false;
-
     if (auth.currentUser != null) {
       await db
           .collection('users')
@@ -493,4 +492,5 @@ class AuthController extends GetxController {
     }
     loadingService.stop();
   }
+
 }

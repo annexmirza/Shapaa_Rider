@@ -58,7 +58,7 @@ Widget landingPage() {
   final authController = Get.put(AuthController(), permanent: true);
   return GetBuilder<AuthController>(builder: (controller) {
     return FutureBuilder(
-      future: controller.checkIfUserIsLoggedIn(),
+      future: authController.checkIfUserIsLoggedIn(),
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.hasData &&
             snapshot.data != null &&
