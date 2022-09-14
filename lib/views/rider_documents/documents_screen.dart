@@ -10,7 +10,6 @@ import '../../widgets/custom_form_field.dart';
 import '../../widgets/custom_text.dart';
 
 class DocumentsScreen extends StatelessWidget {
-
   final authController = Get.put(AuthController());
 
   @override
@@ -64,46 +63,22 @@ class DocumentsScreen extends StatelessWidget {
               SizedBox(
                 height: 10.h,
               ),
-              if(authController.updateVehicleInfo == false)
-              for (var document in authController.listOfDocuments)
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 5.h, horizontal: 15.w),
-                  child: DocumentCard(
-                    ontap: () {
-                      authController.mapSelectedDocument(document);
-                      Get.to(() => DocumentFileScreen());
-                    },
-                    uploadingDoc:
-                        document.docFile != null && document.docFile!.isEmpty
-                            ? true
-                            : false,
-                    uploaded:
-                        document.docFile != null && document.docFile!.isNotEmpty
-                            ? true
-                            : false,
-                    dateOnTap: () {},
-                    titletext: document.docTitle,
-                    subtext: '',
-                  ),
-                ),
-
-              if(authController.updateVehicleInfo)
-                for (var document in authController.vehicleModel.listOfDocuments!)
+              if (authController.updateVehicleInfo == false)
+                for (var document in authController.listOfDocuments)
                   Padding(
                     padding:
-                    EdgeInsets.symmetric(vertical: 5.h, horizontal: 15.w),
+                        EdgeInsets.symmetric(vertical: 5.h, horizontal: 15.w),
                     child: DocumentCard(
                       ontap: () {
                         authController.mapSelectedDocument(document);
                         Get.to(() => DocumentFileScreen());
                       },
                       uploadingDoc:
-                      document.docFile != null && document.docFile!.isEmpty
-                          ? true
-                          : false,
-                      uploaded:
-                      document.docFile != null && document.docFile!.isNotEmpty
+                          document.docFile != null && document.docFile!.isEmpty
+                              ? true
+                              : false,
+                      uploaded: document.docFile != null &&
+                              document.docFile!.isNotEmpty
                           ? true
                           : false,
                       dateOnTap: () {},
@@ -111,15 +86,39 @@ class DocumentsScreen extends StatelessWidget {
                       subtext: '',
                     ),
                   ),
-
+              if (authController.updateVehicleInfo)
+                for (var document
+                    in authController.vehicleModel.listOfDocuments!)
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
+                    child: DocumentCard(
+                      ontap: () {
+                        authController.mapSelectedDocument(document);
+                        Get.to(() => DocumentFileScreen());
+                      },
+                      uploadingDoc:
+                          document.docFile != null && document.docFile!.isEmpty
+                              ? true
+                              : false,
+                      uploaded: document.docFile != null &&
+                              document.docFile!.isNotEmpty
+                          ? true
+                          : false,
+                      dateOnTap: () {},
+                      titletext: document.docTitle,
+                      subtext: '',
+                    ),
+                  ),
               SizedBox(
                 height: 10.h,
               ),
               Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 48.sp, vertical: 10.h),
+                padding: EdgeInsets.symmetric(horizontal: 4.sp, vertical: 10.h),
                 child: CustomBtn(
-                    text: authController.updateVehicleInfo ? 'Update' : 'Continue',
+                    text: authController.updateVehicleInfo
+                        ? 'Update'
+                        : 'Continue',
                     onPressed: () {
                       authController.validateDocuments();
                     }),

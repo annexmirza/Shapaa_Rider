@@ -48,7 +48,9 @@ class AuthController extends GetxController {
   CameraController? controller;
   Future? initializeControllerFuture;
   int? selectedCamera = 0;
-  bool isButtonVisible = true,updateDocuments = false,updateVehicleInfo = false;
+  bool isButtonVisible = true,
+      updateDocuments = false,
+      updateVehicleInfo = false;
   File? file;
   String? profileImage;
   List<DocumentModel> listOfDocuments = [];
@@ -65,32 +67,29 @@ class AuthController extends GetxController {
   // addDocumentsData() {
   //   if (listOfDocuments.isEmpty) {
 
-
-  getVehicleInfo() async{
-
+  getVehicleInfo() async {
     await _collectionReference
         .doc(auth.currentUser!.uid)
         .collection(vehicleInformationCollection)
         .doc(auth.currentUser!.uid)
         .get()
-        .then((value){
-           vehicleModel = VehicleModel.fromDocumentSnapShot(value);
-           selectedVehicle = vehicleModel.vehicleType;
-           registrationController.text = vehicleModel.registrationNumber!;
-           licenseController.text = vehicleModel.licenseNumber!;
-        });
+        .then((value) {
+      vehicleModel = VehicleModel.fromDocumentSnapShot(value);
+      selectedVehicle = vehicleModel.vehicleType;
+      registrationController.text = vehicleModel.registrationNumber!;
+      licenseController.text = vehicleModel.licenseNumber!;
+    });
     update();
   }
+
   addDocumentsData() {
-      listOfDocuments.clear();
-      listOfDocuments.add(DocumentModel(docTitle: 'Vehicle Registration Copy'));
-      listOfDocuments
-          .add(DocumentModel(docTitle: 'Identification Card (Front)'));
-      listOfDocuments
-          .add(DocumentModel(docTitle: 'Identification Card (Back)'));
-      listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Front)'));
-      listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Back)'));
-      print('length ${listOfDocuments.length}');
+    listOfDocuments.clear();
+    listOfDocuments.add(DocumentModel(docTitle: 'Vehicle Registration Copy'));
+    listOfDocuments.add(DocumentModel(docTitle: 'Identification Card (Front)'));
+    listOfDocuments.add(DocumentModel(docTitle: 'Identification Card (Back)'));
+    listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Front)'));
+    listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Back)'));
+    print('length ${listOfDocuments.length}');
   }
 
   mapSelectedDocument(DocumentModel doc) {
@@ -409,10 +408,10 @@ class AuthController extends GetxController {
           // update();
 
           loadingService.stop();
-          if(updateVehicleInfo){
+          if (updateVehicleInfo) {
             Get.back();
             Get.back();
-          }else {
+          } else {
             Get.offAll(() => DocumentsScreen());
           }
         }
@@ -436,8 +435,8 @@ class AuthController extends GetxController {
     }
   }
 
-  validateDocuments() async{
-    if(updateVehicleInfo == false) {
+  validateDocuments() async {
+    if (updateVehicleInfo == false) {
       bool file = true;
       for (var element in listOfDocuments) {
         element.docStatus = 'approved';
@@ -453,12 +452,11 @@ class AuthController extends GetxController {
         vehicleModel.licenseNumber = licenseController.text;
         addVehicleInfo();
         Get.to(() => HomeScreen());
-      }
-      else if (file == false) {
+      } else if (file == false) {
         Get.snackbar('Error', 'PLease Upload All Document Files',
             backgroundColor: Colors.lightBlue, colorText: Colors.white);
       }
-    }else if(updateVehicleInfo){
+    } else if (updateVehicleInfo) {
       print("true was true");
       bool file = true;
       for (var element in vehicleModel.listOfDocuments!) {
@@ -469,8 +467,7 @@ class AuthController extends GetxController {
       }
       if (file) {
         await addVehicleInfo();
-      }
-      else if (file == false) {
+      } else if (file == false) {
         Get.snackbar('Error', 'PLease Upload All Document Files',
             backgroundColor: Colors.lightBlue, colorText: Colors.white);
       }

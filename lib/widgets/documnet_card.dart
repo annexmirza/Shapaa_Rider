@@ -56,7 +56,7 @@ class DocumentCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 40.h,
+                    height: 10.h,
                     child: Text(
                       requried ?? '',
                       style: TextStyle(
@@ -68,7 +68,7 @@ class DocumentCard extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: 10.h,
+                height: 0.h,
               ),
               Container(
                 child: Text(

@@ -27,14 +27,16 @@ class SplashScreen extends StatelessWidget {
           children: [
             Column(
               children: [
-                Container(
-                  height: 100.h,
-                  child: CustomText(
-                    color: appOrengeColor,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 30.sp,
-                    text: '''Welcome To
-                       Shapaa''',
+                Center(
+                  child: Container(
+                    height: 100.h,
+                    child: CustomText(
+                      color: appOrengeColor,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 30.sp,
+                      text: '''     Welcome To
+         Shapaa''',
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -46,14 +48,14 @@ class SplashScreen extends StatelessWidget {
                       color: appGreyColor,
                       fontWeight: FontWeight.w600,
                       fontSize: 20.sp,
-                      text: '''Experience the luxury'''),
+                      text: '''Luxury is a state of mind'''),
                 ),
                 SizedBox(
                   height: 20.h,
                 ),
                 Container(
-                  width: 350.h,
-                  height: 190.h,
+                  width: 330.h,
+                  height: 290.h,
                   child: Image.network(
                       'https://googleflutter.com/sample_image.jpg'),
                   // decoration: BoxDecoration(

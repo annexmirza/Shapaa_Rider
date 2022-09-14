@@ -50,7 +50,8 @@ class VehicleInfoScreen extends StatelessWidget {
               Center(
                 child: CustomText(
                   text: 'Vehicle Information',
-                  fontSize: 25.sp,
+                  fontSize: 30.sp,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               Form(
@@ -96,7 +97,7 @@ class VehicleInfoScreen extends StatelessWidget {
                         controller: authController.licenseController,
                       ),
                       SizedBox(
-                        height: 20.h,
+                        height: 40.h,
                       ),
                       CustomBtn(
                           text: 'Continue',
