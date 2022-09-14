@@ -57,7 +57,7 @@ class SignUpScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomText(
-                        text: 'Sign Up',
+                        text: authController.updatePersonalInfo ? "Personal Information" : 'Sign Up',
                         fontSize: 30.sp,
                         color: Colors.red,
                         fontWeight: FontWeight.bold,
@@ -94,9 +94,9 @@ class SignUpScreen extends StatelessWidget {
                 padding:
                     EdgeInsets.symmetric(horizontal: 48.sp, vertical: 10.h),
                 child: CustomBtn(
-                    text: 'Continue',
+                    text: authController.updatePersonalInfo ? "Update" : 'Continue',
                     onPressed: () {
-                      authController.validateSignUpForm();
+                      authController.updatePersonalInfo ? Get.snackbar('Alert', 'Coming Soon',backgroundColor: Colors.lightBlue, colorText: Colors.white): authController.validateSignUpForm();
                     }),
               )
             ],

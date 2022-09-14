@@ -49,7 +49,7 @@ class AuthController extends GetxController {
   Future? initializeControllerFuture;
   int? selectedCamera = 0;
   bool isButtonVisible = true,
-      updateDocuments = false,
+      updatePersonalInfo = false,
       updateVehicleInfo = false;
   File? file;
   String? profileImage;
@@ -79,7 +79,6 @@ class AuthController extends GetxController {
       registrationController.text = vehicleModel.registrationNumber!;
       licenseController.text = vehicleModel.licenseNumber!;
     });
-    update();
   }
 
   addDocumentsData() {
@@ -90,6 +89,13 @@ class AuthController extends GetxController {
     listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Front)'));
     listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Back)'));
     print('length ${listOfDocuments.length}');
+  }
+
+  mapPersonalInfo() {
+    firstNameController.text = userModel.firstName!;
+    lastNameController.text = userModel.lastName!;
+    emailController.text = userModel.email!;
+    updatePersonalInfo = true;
   }
 
   mapSelectedDocument(DocumentModel doc) {
@@ -309,7 +315,6 @@ class AuthController extends GetxController {
 
   Future<bool> checkIfUserIsLoggedIn() async {
     bool isLoggedIn = false;
-
     if (auth.currentUser != null) {
       await db
           .collection('users')
@@ -322,6 +327,7 @@ class AuthController extends GetxController {
           isLoggedIn = true;
         }
       });
+      await getVehicleInfo();
       return isLoggedIn;
     }
     return isLoggedIn;
@@ -331,6 +337,8 @@ class AuthController extends GetxController {
     try {
       if (auth.currentUser != null) {
         userModel = UserModel();
+        updatePersonalInfo = false;
+        updateVehicleInfo = false;
         await db.collection('users').doc(auth.currentUser!.uid).delete();
         await auth.signOut();
         Get.offAll(() => PhoneAuthScreen());
