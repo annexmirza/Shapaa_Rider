@@ -48,7 +48,7 @@ class AuthController extends GetxController {
   CameraController? controller;
   Future? initializeControllerFuture;
   int? selectedCamera = 0;
-  bool isButtonVisible = true,updateDocuments = false,updateVehicleInfo = false;
+  bool isButtonVisible = true,updatePersonalInfo = false,updateVehicleInfo = false;
   File? file;
   String? profileImage;
   List<DocumentModel> listOfDocuments = [];
@@ -92,6 +92,12 @@ class AuthController extends GetxController {
       print('length ${listOfDocuments.length}');
   }
 
+  mapPersonalInfo(){
+    firstNameController.text = userModel.firstName!;
+    lastNameController.text = userModel.lastName!;
+    emailController.text = userModel.email!;
+    updatePersonalInfo = true;
+  }
   mapSelectedDocument(DocumentModel doc) {
     selectedDocument = doc;
   }
@@ -331,6 +337,8 @@ class AuthController extends GetxController {
     try {
       if (auth.currentUser != null) {
         userModel = UserModel();
+        updatePersonalInfo = false;
+        updateVehicleInfo = false;
         await db.collection('users').doc(auth.currentUser!.uid).delete();
         await auth.signOut();
         Get.offAll(() => PhoneAuthScreen());

@@ -8,6 +8,7 @@ import 'package:shapaa_rider/controllers/auth_controller.dart';
 import 'package:shapaa_rider/controllers/map_controller.dart';
 import 'package:shapaa_rider/controllers/order_controller.dart';
 import 'package:shapaa_rider/models/order_model.dart';
+import 'package:shapaa_rider/views/authentication/signup_screen.dart';
 import 'package:shapaa_rider/views/my_deliveries.dart';
 import 'package:shapaa_rider/views/my_earning_screen.dart';
 import 'package:shapaa_rider/views/rider_documents/documents_screen.dart';
@@ -209,8 +210,8 @@ class HomeScreen extends StatelessWidget {
             ),
             InkWell(
                 onTap: () {
-                  // Get.to(() => InboxScreen());
-                  // Get.to(MyBookingScreen());
+                  authController.mapPersonalInfo();
+                  Get.to(() => SignUpScreen());
                 },
                 child: Padding(
                     padding: EdgeInsets.only(left: 18.0.h, bottom: 5.h),

@@ -94,9 +94,9 @@ class SignUpScreen extends StatelessWidget {
                 padding:
                     EdgeInsets.symmetric(horizontal: 48.sp, vertical: 10.h),
                 child: CustomBtn(
-                    text: 'Continue',
+                    text: authController.updatePersonalInfo ? "Update" : 'Continue',
                     onPressed: () {
-                      authController.validateSignUpForm();
+                      authController.updatePersonalInfo ? print("yes") : authController.validateSignUpForm();
                     }),
               )
             ],
