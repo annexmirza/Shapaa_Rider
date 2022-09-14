@@ -57,7 +57,7 @@ class SignUpScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomText(
-                        text: 'Sign Up',
+                        text: authController.updatePersonalInfo ? "Personal Information" : 'Sign Up',
                         fontSize: 30.sp,
                         color: Colors.red,
                         fontWeight: FontWeight.bold,
