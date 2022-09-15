@@ -10,8 +10,9 @@ class DocumentCard extends StatelessWidget {
   String? subtext;
   String? showDate;
   var dateOnTap;
+  var onViewTap;
   String? docName;
-  bool? uploadingDoc, uploaded, isDateVisible;
+  bool? uploadingDoc, uploaded, isDateVisible,isViewVisible;
   DocumentCard(
       {this.titletext,
       this.showDate,
@@ -20,6 +21,8 @@ class DocumentCard extends StatelessWidget {
       this.requried,
       required this.dateOnTap,
       this.docName,
+      required this.onViewTap,
+      this.isViewVisible = false,
       this.isDateVisible,
       this.uploadingDoc,
       this.uploaded});
@@ -37,15 +40,16 @@ class DocumentCard extends StatelessWidget {
           border: Border.all(color: appGreyColor),
           borderRadius: const BorderRadius.all(Radius.circular(10))),
       child: Padding(
-        padding: EdgeInsets.all(18.0),
+        padding: const EdgeInsets.all(18.0),
         child: Align(
           alignment: Alignment.topRight,
           child: Column(
             children: [
+              if(isViewVisible!)
               Align(
                   alignment: Alignment.topRight,
                   child:
-                      InkWell(onTap: () {}, child: CustomText(text: "View"))),
+                      InkWell(onTap: onViewTap, child: CustomText(text: "View"))),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

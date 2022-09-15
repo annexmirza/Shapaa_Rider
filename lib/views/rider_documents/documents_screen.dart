@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shapaa_rider/constands.dart';
 import 'package:shapaa_rider/views/rider_documents/document_file_screen.dart';
+import 'package:shapaa_rider/views/rider_documents/document_submit_screen.dart';
 import 'package:shapaa_rider/widgets/documnet_card.dart';
 import '../../controllers/auth_controller.dart';
 import '../../widgets/custom_btn.dart';
@@ -84,8 +85,10 @@ class DocumentsScreen extends StatelessWidget {
                       dateOnTap: () {},
                       titletext: document.docTitle,
                       subtext: '',
+                      onViewTap: null,
                     ),
                   ),
+              // if the documents are from firestore and need to be updated
               if (authController.updateVehicleInfo)
                 for (var document
                     in authController.vehicleModel.listOfDocuments!)
@@ -93,6 +96,11 @@ class DocumentsScreen extends StatelessWidget {
                     padding:
                         EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
                     child: DocumentCard(
+                      onViewTap: authController.updateVehicleInfo ? (){
+                         authController.mapSelectedDocument(document);
+                         Get.to(() => DocumentSubmitPage());
+                      } : null,
+                      isViewVisible: authController.updateVehicleInfo ? true : false,
                       ontap: () {
                         authController.mapSelectedDocument(document);
                         Get.to(() => DocumentFileScreen());

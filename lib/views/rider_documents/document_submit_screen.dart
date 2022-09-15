@@ -49,7 +49,17 @@ class DocumentSubmitPage extends StatelessWidget {
                       fit: BoxFit.fill,
                       alignment: Alignment.center,
                       child: Center(
-                        child: authController.file != null
+                        child:
+                            // show from network when updating document
+                           authController.updateVehicleInfo
+                            ?
+                             Image.network(
+                               authController.selectedDocument.docFile!,
+                               fit: BoxFit.cover,
+                             )
+                           :
+                           // when first time creating account and creating documents
+                           authController.file != null
                             ? Image.file(
                                 authController.file!,
                                 fit: BoxFit.cover,
@@ -72,31 +82,36 @@ class DocumentSubmitPage extends StatelessWidget {
                   //           aspectRatio: 1,
                   //           child: Image.file(controller.file)),),
                   // ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Container(
-                    height: 30.h,
-                    child: CustomText(
-                      color: appGreyColor,
-                      text: "Want to use this Photo?",
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25.sp,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 50.h,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(28.0),
-                    child: Align(
-                        alignment: Alignment.center,
-                        child: CustomBtn(
-                            text: 'Submit',
-                            onPressed: () async {
-                              authController.uploadFileToFirebaseStorage();
-                            })),
-                  ),
+                  if(authController.updateVehicleInfo == false)
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      SizedBox(
+                        height: 30.h,
+                        child: CustomText(
+                          color: appGreyColor,
+                          text: "Want to use this Photo?",
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25.sp,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50.h,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(28.0),
+                        child: Align(
+                            alignment: Alignment.center,
+                            child: CustomBtn(
+                                text: 'Submit',
+                                onPressed: () async {
+                                  authController.uploadFileToFirebaseStorage();
+                                })),
+                      ),
+                    ],
+                  )
                 ],
               );
             },
