@@ -49,7 +49,9 @@ class DocumentCard extends StatelessWidget {
               Align(
                   alignment: Alignment.topRight,
                   child:
-                      InkWell(onTap: onViewTap, child: CustomText(text: "View"))),
+                      InkWell(
+                          onTap: onViewTap,
+                          child: CustomText(text: "View"))),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

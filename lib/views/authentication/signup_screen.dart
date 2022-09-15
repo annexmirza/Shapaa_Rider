@@ -96,7 +96,7 @@ class SignUpScreen extends StatelessWidget {
                 child: CustomBtn(
                     text: authController.updatePersonalInfo ? "Update" : 'Continue',
                     onPressed: () {
-                      authController.updatePersonalInfo ? Get.snackbar('Alert', 'Coming Soon',backgroundColor: Colors.lightBlue, colorText: Colors.white): authController.validateSignUpForm();
+                      authController.validateSignUpForm();
                     }),
               )
             ],

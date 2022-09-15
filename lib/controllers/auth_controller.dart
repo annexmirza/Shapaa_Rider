@@ -281,6 +281,10 @@ class AuthController extends GetxController {
     if (!signUpFormKey.currentState!.validate()) {
       return null;
     } else if (auth.currentUser != null) {
+      // only check when user is updating his profile information and to check that info is different from before
+      if(updatePersonalInfo && (firstNameController.text == userModel.firstName && lastNameController.text == userModel.lastName && emailController.text == userModel.email)){
+        return;
+      }
       userModel.firstName = firstNameController.text;
       userModel.lastName = lastNameController.text;
       userModel.email = emailController.text;
@@ -305,9 +309,11 @@ class AuthController extends GetxController {
             .set(userModel.mapToLocalStorage());
         loadingService.stop();
         update();
-        Get.snackbar('Success', 'User Added',
-            backgroundColor: Colors.amber, colorText: Colors.white);
-        Get.offAll(() => VehicleInfoScreen());
+        Get.snackbar('Success', updatePersonalInfo ? "User Information Updated" : 'User Added',
+            backgroundColor: Colors.lightBlue, colorText: Colors.white);
+        if(updatePersonalInfo == false) {
+          Get.offAll(() => VehicleInfoScreen());
+        }
       });
       loadingService.stop();
     }
