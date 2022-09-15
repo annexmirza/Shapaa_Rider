@@ -24,7 +24,10 @@ class HomeScreen extends StatelessWidget {
   AuthController authController = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
-    orderController.getNewOrders();
+    orderController.getCurrentOrder();
+    if (orderController.currentOrder == null) {
+      orderController.getNewOrders();
+    }
     mapController.getCurrentLocation();
     // orderController.duplicate();
     return Scaffold(
@@ -48,7 +51,8 @@ class HomeScreen extends StatelessWidget {
                         color: Colors.redAccent,
                         shape: BoxShape.circle,
                         // borderRadius: BorderRadius.all(Radius.circular(20.r)),
-                        image: authController.userModel.profilePic != null && authController.userModel.profilePic!.isNotEmpty
+                        image: authController.userModel.profilePic != null &&
+                                authController.userModel.profilePic!.isNotEmpty
                             ? DecorationImage(
                                 image: NetworkImage(
                                     authController.userModel.profilePic!),
@@ -68,16 +72,17 @@ class HomeScreen extends StatelessWidget {
                           CustomText(text: authController.userModel.firstName!),
                           Row(
                             children: [
-                              for(int i=0;i<5;i++)
-                              Icon(
-                                Icons.star,
-                                color: appOrengeColor,
-                                size: 20.r,
-                              ),
+                              for (int i = 0; i < 5; i++)
+                                Icon(
+                                  Icons.star,
+                                  color: appOrengeColor,
+                                  size: 20.r,
+                                ),
                             ],
                           ),
                           CustomText(
-                              text: authController.vehicleModel.vehicleType!.toUpperCase())
+                              text: authController.vehicleModel.vehicleType!
+                                  .toUpperCase())
                         ],
                       ),
                     )
@@ -235,7 +240,7 @@ class HomeScreen extends StatelessWidget {
               height: 20.h,
             ),
             InkWell(
-                onTap: () async{
+                onTap: () async {
                   authController.updateVehicleInfo = true;
                   Get.to(() => VehicleInfoScreen());
                   // Get.to(() => InboxScreen());
@@ -356,12 +361,9 @@ class HomeScreen extends StatelessWidget {
                         );
                 }),
                 GetBuilder<OrderController>(builder: (orderController) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      for (OrderModel order in orderController.orders)
-                        Center(
+                  return orderController.currentOrder != null
+                      ? Align(
+                          alignment: Alignment.bottomCenter,
                           child: Container(
                               padding: EdgeInsets.all(10.sp),
                               height: 190.h,
@@ -405,7 +407,8 @@ class HomeScreen extends StatelessWidget {
                                                   color: Colors.black,
                                                 ),
                                                 CustomText(
-                                                  text: '${order.distance} KM',
+                                                  text:
+                                                      '${orderController.currentOrder!.distance} KM',
                                                   fontSize: 15.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black,
@@ -429,7 +432,7 @@ class HomeScreen extends StatelessWidget {
                                           ),
                                           CustomText(
                                             text:
-                                                'Delivery Charge: PKR ${order.deliveryFees}',
+                                                'Delivery Charge: PKR ${orderController.currentOrder!.deliveryFees}',
                                             fontSize: 15.sp,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black,
@@ -445,9 +448,23 @@ class HomeScreen extends StatelessWidget {
                                     height: 36.h,
                                     width: 200.w,
                                     child: CustomBtn(
-                                      text: 'Accept',
+                                      text: orderController
+                                                  .currentOrder!.orderStatus ==
+                                              'accepted'
+                                          ? 'Pick'
+                                          : 'Deliver',
                                       onPressed: () {
-                                        orderController.acceptOrder(order);
+                                        if (orderController
+                                                .currentOrder!.orderStatus ==
+                                            'accepted') {
+                                          orderController.pickOrder(
+                                              orderController.currentOrder!);
+                                        } else if (orderController
+                                                .currentOrder!.orderStatus ==
+                                            'picked') {
+                                          orderController.deliverOrder(
+                                              orderController.currentOrder!);
+                                        }
                                       },
                                     ),
                                     color: appOrengeColor,
@@ -457,9 +474,116 @@ class HomeScreen extends StatelessWidget {
                                   ),
                                 ],
                               )),
-                        ),
-                    ],
-                  );
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            for (OrderModel order in orderController.orders)
+                              Center(
+                                child: Container(
+                                    padding: EdgeInsets.all(10.sp),
+                                    height: 190.h,
+                                    margin: EdgeInsets.only(bottom: 10.h),
+                                    width: Get.width - 30.w,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(30.r),
+                                        topRight: Radius.circular(30.r),
+                                      ),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            CircleAvatar(
+                                              backgroundImage:
+                                                  AssetImage('assets/logo.png'),
+                                              radius: 30.r,
+                                              backgroundColor:
+                                                  Colors.blueAccent,
+                                            ),
+                                            SizedBox(
+                                              width: 10.w,
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  width: 250.w,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      CustomText(
+                                                        text: 'John Doe',
+                                                        fontSize: 20.sp,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
+                                                      CustomText(
+                                                        text:
+                                                            '${order.distance} KM',
+                                                        fontSize: 15.sp,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.star,
+                                                      color: Colors.blueAccent,
+                                                      size: 15.sp,
+                                                    ),
+                                                    CustomText(
+                                                      text: '4.8',
+                                                      fontSize: 15.sp,
+                                                      color: Colors.blueAccent,
+                                                    ),
+                                                  ],
+                                                ),
+                                                CustomText(
+                                                  text:
+                                                      'Delivery Charge: PKR ${order.deliveryFees}',
+                                                  fontSize: 15.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 20.h,
+                                        ),
+                                        Container(
+                                          height: 36.h,
+                                          width: 200.w,
+                                          child: CustomBtn(
+                                            text: 'Accept',
+                                            onPressed: () {
+                                              orderController
+                                                  .acceptOrder(order);
+                                            },
+                                          ),
+                                          color: appOrengeColor,
+                                        ),
+                                        SizedBox(
+                                          height: 20.h,
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                          ],
+                        );
                 }),
               ],
             ),

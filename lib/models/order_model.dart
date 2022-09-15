@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
@@ -10,8 +12,8 @@ class OrderModel {
   double? total;
   DocumentReference? userRef;
   DocumentReference? shopRef;
-  GeoPoint? pickUpLocation;
-  GeoPoint? dropOffLocation;
+  Map<String, dynamic>? pickUpLocation;
+  Map<String, dynamic>? dropOffLocation;
   DocumentReference? docRef;
   double? distance;
   int? date;

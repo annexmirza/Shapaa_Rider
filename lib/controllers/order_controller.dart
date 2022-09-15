@@ -14,26 +14,50 @@ class OrderController extends GetxController {
   String currentDate = '';
   List<OrderModel> orders = [];
   List<OrderModel> myOrders = [];
+  OrderModel? currentOrder;
   List<EarningModel> earnings = [];
   double totalEarning = 0.0;
   getNewOrders() async {
     FirebaseFirestore.instance
         .collection('orders')
-        .where('order_status', isEqualTo: 'Pending')
+        .where('order_status', isEqualTo: 'pending')
         .snapshots()
         .listen((QuerySnapshot snapshot) {
       orders.clear();
       snapshot.docs.forEach((doc) {
         OrderModel order = OrderModel.fromDocumentSnapshot(doc);
         order.distance = Geolocator.distanceBetween(
-                order.pickUpLocation!.latitude,
-                order.pickUpLocation!.longitude,
-                order.dropOffLocation!.latitude,
-                order.dropOffLocation!.longitude) /
+                order.pickUpLocation!['lat'],
+                order.pickUpLocation!['lng'],
+                order.dropOffLocation!['lat'],
+                order.dropOffLocation!['lng']) /
             1000;
         order.distance = double.parse(order.distance!.toStringAsFixed(2));
         orders.add(order);
       });
+      update();
+    });
+  }
+
+  getCurrentOrder() {
+    FirebaseFirestore.instance
+        .collection('orders')
+        .where('order_status', isNotEqualTo: 'delivered')
+        .where('rider_ref', isEqualTo: authController.userModel.docRef)
+        .snapshots()
+        .listen((QuerySnapshot snapshot) {
+      currentOrder = null;
+      if (snapshot.docs.isNotEmpty) {
+        OrderModel order = OrderModel.fromDocumentSnapshot(snapshot.docs[0]);
+        order.distance = Geolocator.distanceBetween(
+                order.pickUpLocation!['lat'],
+                order.pickUpLocation!['lng'],
+                order.dropOffLocation!['lat'],
+                order.dropOffLocation!['lng']) /
+            1000;
+        order.distance = double.parse(order.distance!.toStringAsFixed(2));
+        currentOrder = order;
+      }
       update();
     });
   }
@@ -54,11 +78,24 @@ class OrderController extends GetxController {
 
   acceptOrder(OrderModel order) async {
     await order.docRef!.update({
-      'order_status': 'Accepted',
+      'order_status': 'accepted',
       'rider_ref': authController.userModel.docRef,
-      'date': DateTime.now().millisecondsSinceEpoch,
     });
-    openMap(order.pickUpLocation!.latitude, order.pickUpLocation!.longitude);
+    openMap(order.pickUpLocation!['lat'], order.pickUpLocation!['lng']);
+  }
+
+  pickOrder(OrderModel order) async {
+    await order.docRef!.update({
+      'order_status': 'picked',
+    });
+
+    openMap(order.dropOffLocation!['lat'], order.dropOffLocation!['lng']);
+  }
+
+  deliverOrder(OrderModel order) async {
+    await order.docRef!.update({
+      'order_status': 'delivered',
+    });
   }
 
   getMyORders() {
@@ -75,10 +112,10 @@ class OrderController extends GetxController {
       snapshot.docs.forEach((doc) {
         OrderModel order = OrderModel.fromDocumentSnapshot(doc);
         order.distance = Geolocator.distanceBetween(
-                order.pickUpLocation!.latitude,
-                order.pickUpLocation!.longitude,
-                order.dropOffLocation!.latitude,
-                order.dropOffLocation!.longitude) /
+                order.pickUpLocation!['lat'],
+                order.pickUpLocation!['lng'],
+                order.dropOffLocation!['lat'],
+                order.dropOffLocation!['lng']) /
             1000;
         if (order.orderDate != currentDate) {
           currentDate = order.orderDate!;
