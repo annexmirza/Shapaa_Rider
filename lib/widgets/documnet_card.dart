@@ -37,11 +37,15 @@ class DocumentCard extends StatelessWidget {
           border: Border.all(color: appGreyColor),
           borderRadius: const BorderRadius.all(Radius.circular(10))),
       child: Padding(
-        padding: const EdgeInsets.all(18.0),
+        padding: EdgeInsets.all(18.0),
         child: Align(
-          alignment: Alignment.topLeft,
+          alignment: Alignment.topRight,
           child: Column(
             children: [
+              Align(
+                  alignment: Alignment.topRight,
+                  child:
+                      InkWell(onTap: () {}, child: CustomText(text: "View"))),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -156,7 +160,7 @@ class DocumentCard extends StatelessWidget {
                             : Text(''),
                   ),
                   Align(
-                    alignment: Alignment.topRight,
+                    alignment: Alignment.topLeft,
                     child: InkWell(
                       onTap: ontap,
                       child: Container(

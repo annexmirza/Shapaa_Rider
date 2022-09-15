@@ -20,7 +20,7 @@ class DocumentsScreen extends StatelessWidget {
       body: SingleChildScrollView(child: GetBuilder<AuthController>(
         builder: (controller) {
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
@@ -114,7 +114,7 @@ class DocumentsScreen extends StatelessWidget {
                 height: 10.h,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4.sp, vertical: 10.h),
+                padding: EdgeInsets.symmetric(horizontal: 4.h, vertical: 10.h),
                 child: CustomBtn(
                     text: authController.updateVehicleInfo
                         ? 'Update'
