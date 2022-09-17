@@ -74,21 +74,26 @@ class AuthController extends GetxController {
         .doc(auth.currentUser!.uid)
         .get()
         .then((value) {
-      vehicleModel = VehicleModel.fromDocumentSnapShot(value);
-      selectedVehicle = vehicleModel.vehicleType;
-      registrationController.text = vehicleModel.registrationNumber!;
-      licenseController.text = vehicleModel.licenseNumber!;
+      if (value.exists) {
+        vehicleModel = VehicleModel.fromDocumentSnapShot(value);
+        selectedVehicle = vehicleModel.vehicleType;
+        registrationController.text = vehicleModel.registrationNumber!;
+        licenseController.text = vehicleModel.licenseNumber!;
+      }
     });
   }
 
   addDocumentsData() {
-    listOfDocuments.clear();
-    listOfDocuments.add(DocumentModel(docTitle: 'Vehicle Registration Copy'));
-    listOfDocuments.add(DocumentModel(docTitle: 'Identification Card (Front)'));
-    listOfDocuments.add(DocumentModel(docTitle: 'Identification Card (Back)'));
-    listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Front)'));
-    listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Back)'));
-    print('length ${listOfDocuments.length}');
+    if (listOfDocuments.isEmpty) {
+      listOfDocuments.add(DocumentModel(docTitle: 'Vehicle Registration Copy'));
+      listOfDocuments
+          .add(DocumentModel(docTitle: 'Identification Card (Front)'));
+      listOfDocuments
+          .add(DocumentModel(docTitle: 'Identification Card (Back)'));
+      listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Front)'));
+      listOfDocuments.add(DocumentModel(docTitle: 'Driving License (Back)'));
+      print('length ${listOfDocuments.length}');
+    }
   }
 
   mapPersonalInfo() {
@@ -122,9 +127,7 @@ class AuthController extends GetxController {
       file = File(xFile!.path);
       if (file != null) {
         XFile? xFile = await controller!.takePicture();
-        if (xFile != null) {
-          file = File(xFile.path);
-        }
+        file = File(xFile.path);
       }
     } catch (e) {
       Get.snackbar('Error', e.toString(),
@@ -282,7 +285,10 @@ class AuthController extends GetxController {
       return null;
     } else if (auth.currentUser != null) {
       // only check when user is updating his profile information and to check that info is different from before
-      if(updatePersonalInfo && (firstNameController.text == userModel.firstName && lastNameController.text == userModel.lastName && emailController.text == userModel.email)){
+      if (updatePersonalInfo &&
+          (firstNameController.text == userModel.firstName &&
+              lastNameController.text == userModel.lastName &&
+              emailController.text == userModel.email)) {
         return;
       }
       userModel.firstName = firstNameController.text;
@@ -309,9 +315,10 @@ class AuthController extends GetxController {
             .set(userModel.mapToLocalStorage());
         loadingService.stop();
         update();
-        Get.snackbar('Success', updatePersonalInfo ? "User Information Updated" : 'User Added',
+        Get.snackbar('Success',
+            updatePersonalInfo ? "User Information Updated" : 'User Added',
             backgroundColor: Colors.lightBlue, colorText: Colors.white);
-        if(updatePersonalInfo == false) {
+        if (updatePersonalInfo == false) {
           Get.offAll(() => VehicleInfoScreen());
         }
       });
@@ -319,7 +326,7 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<bool> checkIfUserIsLoggedIn() async {
+  Future<Widget?> checkIfUserIsLoggedIn() async {
     bool isLoggedIn = false;
     if (auth.currentUser != null) {
       await db
@@ -334,9 +341,15 @@ class AuthController extends GetxController {
         }
       });
       await getVehicleInfo();
-      return isLoggedIn;
+      if (vehicleModel.vehicleType == null &&
+          vehicleModel.vehicleType == null) {
+        return VehicleInfoScreen();
+      }
+      else{
+        return HomeScreen();
+      }
     }
-    return isLoggedIn;
+    return null;
   }
 
   signOut() async {
@@ -356,7 +369,7 @@ class AuthController extends GetxController {
   }
 
   mapUserDataToControllers() {
-    if (userModel != null && userModel.email != null) {
+    if (userModel.email != null) {
       firstNameController.text = userModel.firstName!;
       lastNameController.text = userModel.lastName!;
       emailController.text = userModel.email!;
@@ -413,21 +426,19 @@ class AuthController extends GetxController {
             .ref()
             .child('riderDocs/$name')
             .putFile(file!);
-        if (taskSnapshot != null) {
-          var value = await taskSnapshot.ref.getDownloadURL();
+        var value = await taskSnapshot.ref.getDownloadURL();
 
-          selectedDocument.docFile = value;
-          // isButtonVisible = true;
-          // loadingService.stop();
-          // update();
+        selectedDocument.docFile = value;
+        // isButtonVisible = true;
+        // loadingService.stop();
+        // update();
 
-          loadingService.stop();
-          if (updateVehicleInfo) {
-            Get.back();
-            Get.back();
-          } else {
-            Get.offAll(() => DocumentsScreen());
-          }
+        loadingService.stop();
+        if (updateVehicleInfo) {
+          Get.back();
+          Get.back();
+        } else {
+          Get.offAll(() => DocumentsScreen());
         }
       }
     } catch (e) {

@@ -59,14 +59,10 @@ Widget landingPage() {
   return GetBuilder<AuthController>(builder: (controller) {
     return FutureBuilder(
       future: authController.checkIfUserIsLoggedIn(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.hasData &&
-            snapshot.data != null &&
-            snapshot.data == true) {
-          return HomeScreen();
-        } else if (snapshot.hasData &&
-            snapshot.data != null &&
-            snapshot.data == false) {
+      builder: (BuildContext context, AsyncSnapshot<Widget?> snapshot) {
+        if (snapshot.hasData && snapshot.data != null) {
+          return snapshot.data!;
+        } else if (snapshot.hasData == false && snapshot.data == null) {
           return SplashScreen();
         }
         return const Center(child: CircularProgressIndicator());

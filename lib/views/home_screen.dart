@@ -81,8 +81,8 @@ class HomeScreen extends StatelessWidget {
                             ],
                           ),
                           CustomText(
-                              text: authController.vehicleModel.vehicleType!
-                                  .toUpperCase())
+                              text: authController.vehicleModel.vehicleType ??
+                                  "".toUpperCase())
                         ],
                       ),
                     )
